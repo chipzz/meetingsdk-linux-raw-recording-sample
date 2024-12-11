@@ -28,7 +28,9 @@ void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData
 		// Write the audio data to the file
 		pcmFile.write((char*)audioRawData->GetBuffer(), audioRawData->GetBufferLen());
 		//std::cout << "buffer length: " << audioRawData->GetBufferLen() << std::endl;
+/*
 		std::cout << "buffer : " << audioRawData->GetBuffer() << std::endl;
+*/
 
 		// Close the wave file
 		pcmFile.close();

@@ -309,7 +309,9 @@ std::string getSelfDirPath()
 	char* tmp = strrchr(dest, '/');
 	if (tmp)
 		*tmp = 0;
+/*
 	printf("getpath\n");
+*/
 	return std::string(dest);
 }
 
@@ -342,7 +344,9 @@ void ReadTEXTSettings()
 {
 	
 	std::string self_dir = getSelfDirPath();
+/*
 	printf("self path: %s\n", self_dir.c_str());
+*/
 	self_dir.append("/config.txt");
 
 	std::ifstream configFile(self_dir.c_str());
@@ -351,7 +355,9 @@ void ReadTEXTSettings()
 	}
 	else{
 
+/*
 		std::cerr << "Readfile success." << std::endl;
+*/
 	}
 
 	std::map<std::string, std::string> config;
@@ -361,23 +367,31 @@ void ReadTEXTSettings()
 		// Process each line to extract key-value pairs
 		processLine(line, config);
 		
+/*
 		std::cerr << "Reading.." << line <<std::endl;
+*/
 	}
 
 	// Example: Accessing values by key
 	if (config.find("meeting_number") != config.end()) {
 		
 		meeting_number=config["meeting_number"];
+/*
 		std::cout << "Meeting Number: " << config["meeting_number"] << std::endl;
+*/
 	}
 	if (config.find("token") != config.end()) {
 		 token=config["token"];
+/*
 		 	std::cout << "Token: " << token<< std::endl;
+*/
 	}
 	if (config.find("meeting_password") != config.end()) {
 		
 		meeting_password=config["meeting_password"];
+/*
 		std::cout << "meeting_password: " << meeting_password << std::endl;
+*/
 	}
 	if (config.find("recording_token") != config.end()) {
 	
@@ -432,7 +446,9 @@ void ReadTEXTSettings()
 
 	// Additional processing or handling of parsed values can be done here
 
+/*
 	printf("directory of config file: %s\n", self_dir.c_str());
+*/
 
 
 }
@@ -574,8 +590,10 @@ void JoinMeeting()
 	withoutloginParam.isVideoOff = false;
 	withoutloginParam.isAudioOff = false;
 
+	/*
 	std::cerr << "JWT token is " << token << std::endl;
 	std::cerr << "Recording token is " << recording_token << std::endl;
+	*/
 
 	//automatically set app_privilege token if it is present in config.txt, or retrieved from web service
 	withoutloginParam.app_privilege_token = NULL;
