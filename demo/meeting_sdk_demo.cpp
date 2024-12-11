@@ -837,6 +837,7 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
 
 gboolean timeout_callback(gpointer data)
 {
+	printf(".\n");
 	return TRUE;
 }
 
@@ -867,21 +868,25 @@ void initAppSettings()
 
 int main(int argc, char* argv[])
 {
-
+	GMainContext *c = g_main_context_default();
 	ReadTEXTSettings();
 
-	
+	/*
+	GMainContext *rpc_server_context = g_main_context_new();
+	g_main_context_push_thread_default(rpc_server_context);
+	g_main_context_acquire(rpc_server_context);
+
+	loop = g_main_loop_new(rpc_server_context, FALSE);
+	*/
+	loop = g_main_loop_new(NULL, FALSE);
 
 	InitMeetingSDK();
 	AuthMeetingSDK();
-	initAppSettings();
-
-
-
-	loop = g_main_loop_new(NULL, FALSE);
 	// add source to default context
 	g_timeout_add(1000, timeout_callback, loop);
 	g_main_loop_run(loop);
+	//loop = g_main_loop_new(NULL, FALSE);
+	initAppSettings();
 	return 0;
 }
 
