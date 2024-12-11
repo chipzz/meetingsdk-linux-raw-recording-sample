@@ -708,17 +708,24 @@ void OnAuthenticationComplete()
 
 void AuthMeetingSDK()
 {
+	cerr << endl;
+	cerr << "AuthMeetingSDK" << endl;
 	SDKError err(SDKError::SDKERR_SUCCESS);
 
 	//create auth service
-	if ((err = CreateAuthService(&m_pAuthService)) != SDKError::SDKERR_SUCCESS) {};
-	std::cerr << "AuthService created." << std::endl;
+	if ((err = CreateAuthService(&m_pAuthService)) != SDKError::SDKERR_SUCCESS)
+	{
+		std::cerr << "AuthService NOT created. " << err << std::endl;
+	}
 
 	//Create a param to insert jwt token
 	ZOOM_SDK_NAMESPACE::AuthContext param;
 
 	//set the event listener for onauthenticationcompleted
-	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS) {};
+	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS)
+	{
+		std::cerr << "AuthServiceEventListener NOT added. " << err << std::endl;
+	}
 	std::cout << "AuthServiceEventListener added." << std::endl;
 
 
@@ -726,9 +733,11 @@ void AuthMeetingSDK()
 		param.jwt_token = token.c_str();
 		std::cerr << "AuthSDK:token extracted from config file " <<param.jwt_token  << std::endl;
 	}
-	m_pAuthService->SDKAuth(param);
+	err = m_pAuthService->SDKAuth(param);
 	////attempt to authenticate
-	//ZOOM_SDK_NAMESPACE::SDKError sdkErrorResult = m_pAuthService->SDKAuth(param);
+//	printf("Error %i\n", err);
+	if (const IZoomLastError *lerr = GetZoomLastError())
+		printf("Error %p\n", lerr->GetErrorDescription());
 
 	//if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS != sdkErrorResult){
 	//	std::cerr << "AuthSDK:error " << std::endl;
@@ -742,6 +751,8 @@ const char *const proxy = "https://localhost:8080";
 
 void InitMeetingSDK()
 {
+	cerr << endl;
+	cerr << "InitMeetingSDK" << endl;
 	ZOOM_SDK_NAMESPACE::SDKError err(ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS);
 	ZOOM_SDK_NAMESPACE::InitParam initParam;
 
