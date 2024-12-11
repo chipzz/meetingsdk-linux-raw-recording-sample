@@ -829,11 +829,6 @@ void my_handler(int s)
 	printf("Leaving session.\n");
 	CleanSDK();
 
-	
-
-	//InitMeetingSDK();
-	//AuthMeetingSDK();
-
 	std::exit(0);
 }
 
