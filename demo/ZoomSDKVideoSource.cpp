@@ -8,6 +8,10 @@
 #include <cstdio>
 #include <chrono>
 
+extern "C"
+{
+#include <libavformat/avformat.h>
+}
 
 //using namespace cv;
 using namespace std;
@@ -68,5 +72,10 @@ void ZoomSDKVideoSource::onUninitialized()
 ZoomSDKVideoSource::ZoomSDKVideoSource(string video_source)
 {
     video_source_ = video_source;
+
+    AVFormatContext* format_ctx = nullptr;
+    if (avformat_open_input(&format_ctx, video_source_.c_str(), nullptr, nullptr) < 0) {
+        std::cerr << "Could not open input file: " << video_source_ << std::endl;
+    }
 }
 
