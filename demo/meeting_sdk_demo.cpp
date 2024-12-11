@@ -62,7 +62,7 @@ USING_ZOOM_SDK_NAMESPACE
 std::string DEFAULT_AUDIO_SOURCE = "yourwavefile.wav";
 
 //references for SendVideoRawData
-std::string DEFAULT_VIDEO_SOURCE = "yourmp4file.mp4";
+std::string DEFAULT_VIDEO_SOURCE = "/mnt/c/Users/piete/discount.mp4";
 
 
 GMainLoop* loop;
@@ -757,6 +757,10 @@ void InitMeetingSDK()
 	ZOOM_SDK_NAMESPACE::InitParam initParam;
 
 	// set domain
+	/*
+	initParam.strWebDomain = "https://zoomer";
+	initParam.strSupportUrl = "https://zoomer";
+	*/
 	initParam.strWebDomain = "https://zoom.us";
 	initParam.strSupportUrl = "https://zoom.us";
 
