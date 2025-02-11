@@ -77,15 +77,17 @@ app.post('/', (req, res) => {
     user_identity: userIdentity,
     session_key: sessionKey,
     geo_regions: joinGeoRegions(geoRegions),
-    cloud_recording_option: cloudRecordingOption,
-    cloud_recording_election: cloudRecordingElection,
-    audio_compatible_mode: audioCompatibleMode
+    cloud_recording_option: 1,
+    cloud_recording_election: 1,
+    audio_compatible_mode: 1
   }
 
   const sHeader = JSON.stringify(oHeader)
   const sPayload = JSON.stringify(oPayload)
+  console.log(oPayload)
   const sdkJWT = KJUR.jws.JWS.sign('HS256', sHeader, sPayload, process.env.ZOOM_VIDEO_SDK_SECRET)
   return res.json({ signature: sdkJWT })
+  //return res.json(sdkJWT)
 })
 
 app.listen(port, () => console.log(`Zoom Video SDK Auth Endpoint Sample Node.js, listening on port ${port}!`))
