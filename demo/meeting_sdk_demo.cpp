@@ -129,6 +129,52 @@ IUserInfo* getUserObj() {
 	return returnvalue;
 }
 
+std::ostream &operator<<(std::ostream &os, SDKError &err)
+{
+	switch (err)
+	{
+		case SDKERR_SUCCESS: os << "SUCCESS"; break;
+		case SDKERR_NO_IMPL: os << "NO_IMPL"; break;
+		case SDKERR_WRONG_USAGE: os << "WRONG_USAGE"; break;
+		case SDKERR_INVALID_PARAMETER: os << "INVALID_PARAMETER"; break;
+		case SDKERR_MODULE_LOAD_FAILED: os << "MODULE_LOAD_FAILED"; break;
+		case SDKERR_MEMORY_FAILED: os << "MEMORY_FAILED"; break;
+		case SDKERR_SERVICE_FAILED: os << "SERVICE_FAILED"; break;
+		case SDKERR_UNINITIALIZE: os << "UNINITIALIZE"; break;
+		case SDKERR_UNAUTHENTICATION: os << "UNAUTHENTICATION"; break;
+		case SDKERR_NORECORDINGINPROCESS: os << "NORECORDINGINPROCESS"; break;
+		case SDKERR_TRANSCODER_NOFOUND: os << "TRANSCODER_NOFOUND"; break;
+		case SDKERR_VIDEO_NOTREADY: os << "VIDEO_NOTREADY"; break;
+		case SDKERR_NO_PERMISSION: os << "NO_PERMISSION"; break;
+		case SDKERR_UNKNOWN: os << "UNKNOWN"; break;
+		case SDKERR_OTHER_SDK_INSTANCE_RUNNING: os << "OTHER_SDK_INSTANCE_RUNNING"; break;
+		case SDKERR_INTERNAL_ERROR: os << "INTERNAL_ERROR"; break;
+		case SDKERR_NO_AUDIODEVICE_ISFOUND: os << "NO_AUDIODEVICE_ISFOUND"; break;
+		case SDKERR_NO_VIDEODEVICE_ISFOUND: os << "NO_VIDEODEVICE_ISFOUND"; break;
+		case SDKERR_TOO_FREQUENT_CALL: os << "TOO_FREQUENT_CALL"; break;
+		case SDKERR_FAIL_ASSIGN_USER_PRIVILEGE: os << "FAIL_ASSIGN_USER_PRIVILEGE"; break;
+		case SDKERR_MEETING_DONT_SUPPORT_FEATURE: os << "MEETING_DONT_SUPPORT_FEATURE"; break;
+		case SDKERR_MEETING_NOT_SHARE_SENDER: os << "MEETING_NOT_SHARE_SENDER"; break;
+		case SDKERR_MEETING_YOU_HAVE_NO_SHARE: os << "MEETING_YOU_HAVE_NO_SHARE"; break;
+		case SDKERR_MEETING_VIEWTYPE_PARAMETER_IS_WRONG: os << "MEETING_VIEWTYPE_PARAMETER_IS_WRONG"; break;
+		case SDKERR_MEETING_ANNOTATION_IS_OFF: os << "MEETING_ANNOTATION_IS_OFF"; break;
+		case SDKERR_SETTING_OS_DONT_SUPPORT: os << "SETTING_OS_DONT_SUPPORT"; break;
+		case SDKERR_EMAIL_LOGIN_IS_DISABLED: os << "EMAIL_LOGIN_IS_DISABLED"; break;
+		case SDKERR_HARDWARE_NOT_MEET_FOR_VB: os << "HARDWARE_NOT_MEET_FOR_VB"; break;
+		case SDKERR_NEED_USER_CONFIRM_RECORD_DISCLAIMER: os << "NEED_USER_CONFIRM_RECORD_DISCLAIMER"; break;
+		case SDKERR_NO_SHARE_DATA: os << "NO_SHARE_DATA"; break;
+		case SDKERR_SHARE_CANNOT_SUBSCRIBE_MYSELF: os << "SHARE_CANNOT_SUBSCRIBE_MYSELF"; break;
+		case SDKERR_NOT_IN_MEETING: os << "NOT_IN_MEETING"; break;
+		case SDKERR_NOT_JOIN_AUDIO: os << "NOT_JOIN_AUDIO"; break;
+		case SDKERR_HARDWARE_DONT_SUPPORT: os << "HARDWARE_DONT_SUPPORT"; break;
+		case SDKERR_DOMAIN_DONT_SUPPORT: os << "DOMAIN_DONT_SUPPORT"; break;
+		case SDKERR_MEETING_REMOTE_CONTROL_IS_OFF: os << "MEETING_REMOTE_CONTROL_IS_OFF"; break;
+		case SDKERR_FILETRANSFER_ERROR: os << "FILETRANSFER_ERROR"; break;
+		default: ;
+	}
+	return os;
+}
+
 //check if you have permission to start raw recording
 void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
 
@@ -178,18 +224,15 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
 
 //check if you meet the requirements to send raw data
 void CheckAndStartRawSending(bool isVideo, bool isAudio) {
-
+	std::cout << "CheckAndStartRawSending(" << isVideo << ", " << isAudio << ")" << std::endl;
 
 	//SendVideoRawData
 	if (isVideo) {
-
 		ZoomSDKVideoSource* virtual_camera_video_source = new ZoomSDKVideoSource(DEFAULT_VIDEO_SOURCE);
 		IZoomSDKVideoSourceHelper* p_videoSourceHelper = GetRawdataVideoSourceHelper();
 
 		if (p_videoSourceHelper) {
 			SDKError err = p_videoSourceHelper->setExternalVideoSource(virtual_camera_video_source);
-
-
 
 			if (err != SDKERR_SUCCESS) {
 				printf("attemptToStartRawVideoSending(): Failed to set external video source, error code: %d\n", err);
@@ -198,14 +241,12 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 				printf("attemptToStartRawVideoSending(): Success \n");
 				IMeetingVideoController* meetingController = m_pMeetingService->GetMeetingVideoController();
 				meetingController->UnmuteVideo();
-
 			}
 		}
 		else {
 			printf("attemptToStartRawVideoSending(): Failed to get video source helper\n");
 		}
 	}
-
 
 	//SendAudioRawData
 	if (isAudio) {
@@ -215,8 +256,6 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 			SDKError err = audioHelper->setExternalAudioSource(audio_source);
 		}
 	}
-
-
 }
 
 
@@ -267,6 +306,8 @@ void turnOffSendVideoandAudio() {
 }
 
 
+bool useCamera;
+
 //callback when the SDK is inmeeting
 void onInMeeting() {
 
@@ -283,6 +324,8 @@ void onInMeeting() {
 
 	//first attempt to start raw recording  / sending, upon successfully joined and achieved "in-meeting" state.
 	CheckAndStartRawRecording(GetVideoRawData, GetAudioRawData);
+	SendVideoRawData = !useCamera;
+	SendAudioRawData = !useCamera;
 	CheckAndStartRawSending(SendVideoRawData, SendAudioRawData);
 
 }
@@ -590,11 +633,14 @@ void JoinMeeting()
 	withoutloginParam.isVideoOff = false;
 	withoutloginParam.isAudioOff = false;
 
+	/*
 	std::cerr << "JWT token is " << token << std::endl;
 	std::cerr << "Recording token is " << recording_token << std::endl;
+	*/
 
 	//automatically set app_privilege token if it is present in config.txt, or retrieved from web service
 	withoutloginParam.app_privilege_token = NULL;
+	/*
 	if (!recording_token.size() == 0)
 	{
 		withoutloginParam.app_privilege_token = recording_token.c_str();
@@ -605,8 +651,10 @@ void JoinMeeting()
 		withoutloginParam.app_privilege_token = NULL;
 		std::cerr << "Leaving recording token as NULL" << std::endl;
 	}
+	*/
 
-	if (GetAudioRawData) {
+	if (GetAudioRawData)
+	{
 		//set join audio to true
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
@@ -615,8 +663,8 @@ void JoinMeeting()
 			pAudioContext->EnableAutoJoinAudio(true);
 		}
 	}
-	if (SendVideoRawData) {
-
+	if (SendVideoRawData)
+	{
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
@@ -626,8 +674,8 @@ void JoinMeeting()
 			pVideoContext->EnableAutoTurnOffVideoWhenJoinMeeting(false);
 		}
 	}
-	if (SendAudioRawData) {
-
+	if (SendAudioRawData)
+	{
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{
@@ -639,64 +687,48 @@ void JoinMeeting()
 		}
 	}
 
+	//attempt to join meeting
+	if (m_pMeetingService)
+	{
+		err = m_pMeetingService->Join(joinParam);
+	}
+	else
+	{
+		std::cout << "join_meeting m_pMeetingService:Null" << std::endl;
+	}
 
-		//attempt to join meeting
-		if (m_pMeetingService)
-		{
-			err = m_pMeetingService->Join(joinParam);
-		}
-		else
-		{
-			std::cout << "join_meeting m_pMeetingService:Null" << std::endl;
-		}
-
-		if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
-		{
-			std::cout << "join_meeting:success" << std::endl;
-		}
-		else
-		{
-			std::cout << "join_meeting:error" << std::endl;
-		}
-	
+	if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
+	{
+		std::cout << "join_meeting:success" << std::endl;
+	}
+	else
+	{
+		std::cout << "join_meeting:error" << std::endl;
+	}
 }
 
 void LeaveMeeting()
 {
 	ZOOM_SDK_NAMESPACE::MeetingStatus status = ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED;
 
+	if (NULL == m_pMeetingService)
+	{
+		std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
+		return;
+	}
+	else
+	{
+		status = m_pMeetingService->GetMeetingStatus();
+	}
 
-		if (NULL == m_pMeetingService)
-		{
+	if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
+		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
+		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
+		return;
 
-			std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
-		
-		}
-		else
-		{
-			status = m_pMeetingService->GetMeetingStatus();
-		}
-
-		if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
-			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
-			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
-		{
-
-			std::cout << "LeaveMeeting() not in meeting " << std::endl;
-			
-		}
-
-		if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
-		{
-			std::cout << "LeaveMeeting() success " << std::endl;
-		
-		}
-		else
-		{
-			std::cout << "LeaveMeeting() error" << std::endl;
-			
-		}
-
+	SDKError err = m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING);
+	if (err != SDKError::SDKERR_SUCCESS)
+		std::cout << "LeaveMeeting() " << err << std::endl;
 }
 
 //callback when authentication is compeleted
@@ -728,14 +760,19 @@ void AuthMeetingSDK()
 	}
 	std::cout << "AuthServiceEventListener added." << std::endl;
 
-
 	if (!token.size() == 0){
 		param.jwt_token = token.c_str();
-		std::cerr << "AuthSDK:token extracted from config file " <<param.jwt_token  << std::endl;
+		std::cerr << "AuthSDK:token extracted from config file <" << param.jwt_token << ">" << std::endl;
 	}
 	err = m_pAuthService->SDKAuth(param);
-	////attempt to authenticate
-//	printf("Error %i\n", err);
+	if (err == SDKError::SDKERR_INTERNAL_ERROR)
+	{
+		std::cerr << err << std::endl;
+		LeaveMeeting();
+		CleanSDK();
+		exit(1);
+	}
+	//attempt to authenticate
 	if (const IZoomLastError *lerr = GetZoomLastError())
 		printf("Error %p\n", lerr->GetErrorDescription());
 
@@ -758,10 +795,10 @@ void InitMeetingSDK()
 
 	// set domain
 	/*
-	initParam.strWebDomain = "https://zoomer";
-	initParam.strSupportUrl = "https://zoomer";
+	initParam.strWebDomain = "localhost";
+	initParam.strSupportUrl = "zoomer";
 	*/
-	initParam.strWebDomain = "https://zoom.us";
+	initParam.strWebDomain = "zoom.us";
 	initParam.strSupportUrl = "https://zoom.us";
 
 	// set language id
@@ -784,17 +821,19 @@ void InitMeetingSDK()
 	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
 		std::cout << "CreateNetworkConnectionHelper created." << std::endl;
 	}
+	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "NetworkConnectionHelper registering NetworkConnectionHandler." << std::endl;
+	}
+	/*
 	ProxySettings proxy_setting;
-	proxy_setting.proxy = proxy;
-	proxy_setting.auto_detect = true;
+	proxy_setting.proxy = "127.0.0.1:8080";
+//	proxy_setting.auto_detect = true;
 	if ((err = network_connection_helper->ConfigureProxy(proxy_setting)) == SDKError::SDKERR_SUCCESS) {
-		std::cout << "Proxy set" << std::endl;
+		std::cout << "Proxy configured" << std::endl;
 	}
 	else
 		std::cerr << err << endl;
-	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
-		std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
-	}
+	*/
 }
 
 
@@ -841,7 +880,9 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
 
 gboolean timeout_callback(gpointer data)
 {
+/*
 	printf(".\n");
+*/
 	return TRUE;
 }
 
@@ -867,6 +908,7 @@ void initAppSettings()
 
 int main(int argc, char* argv[])
 {
+	useCamera = (argc > 1);
 	GMainContext *c = g_main_context_default();
 	ReadTEXTSettings();
 
@@ -881,11 +923,10 @@ int main(int argc, char* argv[])
 
 	InitMeetingSDK();
 	AuthMeetingSDK();
+	initAppSettings();
 	// add source to default context
 	g_timeout_add(1000, timeout_callback, loop);
 	g_main_loop_run(loop);
 	//loop = g_main_loop_new(NULL, FALSE);
-	initAppSettings();
 	return 0;
 }
-

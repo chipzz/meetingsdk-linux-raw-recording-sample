@@ -1,25 +1,24 @@
-#include <iostream>
 #include "NetworkConnectionHandler.h"
-
-using namespace std;
+#include "Log.h"
 
 NetworkConnectionHandler::NetworkConnectionHandler(void (*postToDo)())
 {
+	LOG_CALLBACK("NetworkConnectionHandler", "NetworkConnectionHandler");
 	postToDo_ = postToDo;
 }
 
 void NetworkConnectionHandler::onProxyDetectComplete()
 {
-	std::cout << "onProxyDetectComplete" << endl;
+	LOG_CALLBACK("NetworkConnectionHandler", "onProxyDetectComplete");
 	if (postToDo_) postToDo_();
 }
 
 void NetworkConnectionHandler::onProxySettingNotification(IProxySettingHandler* handler)
 {
-	std::cout << "onProxySettingNotification" << endl;
+	LOG_CALLBACK("NetworkConnectionHandler", "onProxySettingNotification");
 }
 
 void NetworkConnectionHandler::onSSLCertVerifyNotification(ISSLCertVerificationHandler* handler)
 {
-	std::cout << "onSSLCertVerifyNotification" << endl;
+	LOG_CALLBACK("NetworkConnectionHandler", "onSSLCertVerifyNotification");
 }

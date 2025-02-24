@@ -2,6 +2,7 @@
 
 #include "rawdata/rawdata_video_source_helper_interface.h"
 #include "ZoomSDKRenderer.h"
+#include "Log.h"
 #include "zoom_sdk_def.h" 
 #include <iostream>
 
@@ -13,12 +14,9 @@
 #include <cstdint>
 #include <cstdio>
 
-
-
-
 void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 {
-	std::cout << "onRawDataFrameReceived." << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataFrameReceived");
 
 	std::cout << "width." << data->GetStreamWidth() << std::endl;
 	std::cout << "height." << data->GetStreamHeight() << std::endl;
@@ -27,20 +25,20 @@ void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 	if (data->GetStreamHeight() == 720) {
 		SaveToRawYUVFile(data);
 	}
-
-
 }
+
 void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
 {
-	std::cout << "onRawDataStatusChanged." << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataStatusChanged", status);
 }
 
 void ZoomSDKRenderer::onRendererBeDestroyed()
 {
-	std::cout << "onRendererBeDestroyed ." << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRendererBeDestroyed");
 }
 
-void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
+void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data)
+{
 
 	//method 1
 

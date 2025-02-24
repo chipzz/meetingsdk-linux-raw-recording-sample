@@ -1,9 +1,70 @@
 #include "MeetingServiceEventListener.h"
+#include <string>
+
+std::string ToString(MeetingStatus &status)
+{
+	switch (status)
+	{
+		case MEETING_STATUS_IDLE: return "IDLE"; break;
+		case MEETING_STATUS_CONNECTING: return "CONNECTING"; break;
+		case MEETING_STATUS_WAITINGFORHOST: return "WAITINGFORHOST"; break;
+		case MEETING_STATUS_INMEETING: return "INMEETING"; break;
+		case MEETING_STATUS_DISCONNECTING: return "DISCONNECTING"; break;
+		case MEETING_STATUS_RECONNECTING: return "RECONNECTING"; break;
+		case MEETING_STATUS_FAILED: return "FAILED"; break;
+		case MEETING_STATUS_ENDED: return "ENDED"; break;
+		case MEETING_STATUS_UNKNOWN: return "UNKNOWN"; break;
+		case MEETING_STATUS_LOCKED: return "LOCKED"; break;
+		case MEETING_STATUS_UNLOCKED: return "UNLOCKED"; break;
+		case MEETING_STATUS_IN_WAITING_ROOM: return "IN_WAITING_ROOM"; break;
+		case MEETING_STATUS_WEBINAR_PROMOTE: return "WEBINAR_PROMOTE"; break;
+		case MEETING_STATUS_WEBINAR_DEPROMOTE: return "WEBINAR_DEPROMOTE"; break;
+		case MEETING_STATUS_JOIN_BREAKOUT_ROOM: return "JOIN_BREAKOUT_ROOM"; break;
+		case MEETING_STATUS_LEAVE_BREAKOUT_ROOM: return "LEAVE_BREAKOUT_ROOM"; break;
+//		default: ;
+	}
+	return "";
+}
+
+std::string ToJSONString(MeetingStatus &status)
+{
+	return ToString(status); // FIXME: Should be int
+}
+
+std::string ToString(const MeetingParameter *meeting_param)
+{
+	if (!meeting_param)
+		return "null";
+
+	return std::to_string(meeting_param->meeting_number);
+}
+
+std::string ToJSONString(const MeetingParameter *meeting_param)
+{
+	return ToString(meeting_param); // FIXME: Should be struct
+}
+
+/*
+std::ostream &operator<<(std::ostream &os, MeetingStatus &status)
+{
+	os << ToString(status);
+	return os;
+}
+
+std::ostream &operator<<(std::ostream &os, const MeetingParameter &parameter)
+{
+	os << parameter.meeting_number;
+	return os;
+}
+*/
+
+#include "Log.h"
 #include <rawdata/zoom_rawdata_api.h>
 #include <iostream>
 
 MeetingServiceEventListener::MeetingServiceEventListener(void (*onMeetingStarts)(), void (*onMeetingEnds)(), void (*onInMeeting)())
 {
+	LOG_CALLBACK("MeetingServiceEventListener", "MeetingServiceEventListener");
 	onMeetingEnds_ = onMeetingEnds;
 	onMeetingStarts_ = onMeetingStarts;
 	onInMeeting_ = onInMeeting;
@@ -11,77 +72,77 @@ MeetingServiceEventListener::MeetingServiceEventListener(void (*onMeetingStarts)
 
 void MeetingServiceEventListener::onMeetingStatusChanged(MeetingStatus status, int iResult)
 {
-	std::cout << "onMeetingStatusChanged: " << status << ", iResult: " << iResult << std::endl;
+	LOG_CALLBACK("MeetingServiceEventListener", "onMeetingStatusChanged", status, iResult);
 	switch (status)
 	{
 	case MEETING_STATUS_IDLE:
-		printf("No meeting is running.\n");
+		std::cout << "No meeting is running" << std::endl;
 		break;
 	case MEETING_STATUS_CONNECTING:
-		printf("Connect to the meeting server status.\n");
+		std::cout << "Connecting to the meeting server" << std::endl;
 		break;
 	case MEETING_STATUS_WAITINGFORHOST:
-		printf("Waiting for the host to start the meeting.\n");
+		std::cout << "Waiting for the host to start the meeting" << std::endl;
 		break;
 	case MEETING_STATUS_INMEETING:
-		printf("onMeetingStatusChanged() In Meeting.\n");
+		std::cout << "In Meeting" << std::endl;
 		if (onInMeeting_) onInMeeting_();
 		break;
 	case MEETING_STATUS_DISCONNECTING:
-		printf("Disconnect the meeting server, leave meeting status.\n");
+		std::cout << "Disconnecting from the meeting server, leaving meeting" << std::endl;
 		break;
 	case MEETING_STATUS_RECONNECTING:
-		printf("Reconnecting meeting server status\n");
+		std::cout << "Reconnecting meeting server" << std::endl;
 		break;
 	case MEETING_STATUS_FAILED:
-		printf("Failed to connect the meeting server.\n");
+		std::cout << "Failed to connect the meeting server" << std::endl;
 		break;
 	case MEETING_STATUS_ENDED:
-		printf("Meeting ends.\n");
+		std::cout << "Meeting ended" << std::endl;
 		if (onMeetingEnds_) onMeetingEnds_();
 		break;
 	case MEETING_STATUS_UNKNOWN:
-		printf("Unknown status.\n");
+		std::cout << "Unknown status" << std::endl;
 		break;
 	case MEETING_STATUS_LOCKED:
-		printf("Meeting is locked to prevent the further participants to join the meeting.\n");
+		std::cout << "Meeting is locked to prevent further participants from joining the meeting" << std::endl;
 		break;
 	case MEETING_STATUS_UNLOCKED:
-		printf("Meeting is open and participants can join the meeting.\n");
+		std::cout << "Meeting is unlocked and participants can join the meeting" << std::endl;
 		break;
 	case MEETING_STATUS_IN_WAITING_ROOM:
-		printf("Participants who join the meeting before the start are in the waiting room.\n");
+		std::cout << "Participants who join the meeting before the start are in the waiting room" << std::endl;
 		break;
-
-
 	}
-
 }
 
 void MeetingServiceEventListener::onMeetingStatisticsWarningNotification(StatisticsWarningType type)
 {
-	std::cout << "onMeetingStatisticsWarningNotification, type: " << type << std::endl;
+	LOG_CALLBACK("MeetingServiceEventListener", "onMeetingStatisticsWarningNotification", type);
 }
 
-void MeetingServiceEventListener::onMeetingParameterNotification(const MeetingParameter* meeting_param)
+void MeetingServiceEventListener::onMeetingParameterNotification(const MeetingParameter *meeting_param)
 {
-	std::cout << "onMeetingParameterNotification" << std::endl;
+	LOG_CALLBACK("MeetingServiceEventListener", "onMeetingParameterNotification", meeting_param);
 	if (onMeetingStarts_) onMeetingStarts_();
 }
 
 void MeetingServiceEventListener::onSuspendParticipantsActivities()
 {
+	LOG_CALLBACK("MeetingServiceEventListener", "onSuspendParticipantsActivities");
 }
 
- void MeetingServiceEventListener::onAICompanionActiveChangeNotice(bool bActive) 
+void MeetingServiceEventListener::onAICompanionActiveChangeNotice(bool bActive)
 {
+	LOG_CALLBACK("MeetingServiceEventListener", "onAICompanionActiveChangeNotice", bActive);
 }
 
- void MeetingServiceEventListener::onMeetingTopicChanged(const zchar_t* sTopic)
- {
- }
+void MeetingServiceEventListener::onMeetingTopicChanged(const zchar_t* sTopic)
+{
+	LOG_CALLBACK("MeetingServiceEventListener", "onMeetingTopicChanged", sTopic);
+}
 
 void MeetingServiceEventListener::onMeetingFullToWatchLiveStream(const zchar_t* sLiveStreamUrl)
 {
-
+	LOG_CALLBACK("MeetingServiceEventListener", "onMeetingFullToWatchLiveStream", sLiveStreamUrl);
 }

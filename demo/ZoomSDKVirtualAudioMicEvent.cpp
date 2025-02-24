@@ -8,6 +8,7 @@
 
 #include "rawdata/rawdata_audio_helper_interface.h"
 #include "ZoomSDKVirtualAudioMicEvent.h"
+#include "Log.h"
 #include "zoom_sdk_def.h" 
 
 #include <thread>
@@ -56,36 +57,40 @@ void PlayAudioFileToVirtualMic(IZoomSDKAudioRawDataSender* audio_sender, string 
 
 /// \brief Callback for virtual audio mic to do some initialization.
 /// \param pSender, You can send audio data based on this object, see \link IZoomSDKAudioRawDataSender \endlink.
-void ZoomSDKVirtualAudioMicEvent::onMicInitialize(IZoomSDKAudioRawDataSender* pSender) {
+void ZoomSDKVirtualAudioMicEvent::onMicInitialize(IZoomSDKAudioRawDataSender* pSender)
+{
 	//pSender->send();	pSender_ = pSender;
-	printf("ZoomSDKVirtualAudioMicEvent OnMicInitialize, waiting for turnOn chat command\n");
+	LOG_CALLBACK("ZoomSDKVirtualAudioMicEvent", "onMicInitialize");
+	std::cout << "Waiting for turnOn chat command" << std::endl;
 }
 
 /// \brief Callback for virtual audio mic can send raw data with 'pSender'.
-void ZoomSDKVirtualAudioMicEvent::onMicStartSend() {
-
-	printf("onMicStartSend\n");
-	std::cout << "onStartSend" << std::endl;
-	if (pSender_ && audio_play_flag != 1) {
-		while (audio_play_flag > -1) {}
+void ZoomSDKVirtualAudioMicEvent::onMicStartSend()
+{
+	LOG_CALLBACK("ZoomSDKVirtualAudioMicEvent", "onMicStartSend");
+	if (pSender_ && audio_play_flag != 1)
+	{
+		while (audio_play_flag > -1);
 		audio_play_flag = 1;
 		thread(PlayAudioFileToVirtualMic, pSender_, audio_source_).detach();
-
 	}
 }
 
 /// \brief Callback for virtual audio mic should stop send raw data.
-void ZoomSDKVirtualAudioMicEvent::onMicStopSend() {
-	printf("onMicStopSend\n");
+void ZoomSDKVirtualAudioMicEvent::onMicStopSend()
+{
+	LOG_CALLBACK("ZoomSDKVirtualAudioMicEvent", "onMicStopSend");
 	audio_play_flag = 0;
 }
 /// \brief Callback for virtual audio mic is uninitialized.
-void ZoomSDKVirtualAudioMicEvent::onMicUninitialized() {
-	std::cout << "onUninitialized" << std::endl;
+void ZoomSDKVirtualAudioMicEvent::onMicUninitialized()
+{
+	LOG_CALLBACK("ZoomSDKVirtualAudioMicEvent", "onMicUninitialized");
 	pSender_ = nullptr;
 }
 
 ZoomSDKVirtualAudioMicEvent::ZoomSDKVirtualAudioMicEvent(std::string audio_source)
 {
+	LOG_CALLBACK("ZoomSDKVirtualAudioMicEvent", "ZoomSDKVirtualAudioMicEvent", audio_source);
 	audio_source_ = audio_source;
 }
