@@ -36,7 +36,8 @@ void ZoomSDKRenderer::onRendererBeDestroyed()
 	std::cout << "onRendererBeDestroyed ." << std::endl;
 }
 
-void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
+void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data)
+{
 	//method 1
 
 	//// Open the file for writing

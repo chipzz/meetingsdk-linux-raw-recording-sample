@@ -117,7 +117,8 @@ IUserInfo* getUserObj() {
 }
 
 //check if you have permission to start raw recording
-void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
+void CheckAndStartRawRecording(bool isVideo, bool isAudio)
+{
 	if (isVideo || isAudio) {
 		m_pRecordController = m_pMeetingService->GetMeetingRecordingController();
 		SDKError err2 = m_pMeetingService->GetMeetingRecordingController()->CanStartRawRecording();
@@ -244,7 +245,8 @@ void turnOffSendVideoandAudio() {
 
 
 //callback when the SDK is inmeeting
-void onInMeeting() {
+void onInMeeting()
+{
 	printf("onInMeeting Invoked\n");
 
 	//double check if you are in a meeting
@@ -444,10 +446,12 @@ void CleanSDK()
 		ZOOM_SDK_NAMESPACE::DestroyMeetingService(m_pMeetingService);
 		m_pMeetingService = NULL;
 	}
-	if (videoHelper) {
+	if (videoHelper)
+	{
 		videoHelper->unSubscribe();
 	}
-	if (audioHelper) {
+	if (audioHelper)
+	{
 		audioHelper->unSubscribe();
 	}
 	//if (_network_connection_helper)
@@ -578,7 +582,8 @@ void JoinMeeting()
 		std::cerr << "Leaving recording token as NULL" << std::endl;
 	}
 
-	if (GetAudioRawData) {
+	if (GetAudioRawData)
+	{
 		//set join audio to true
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
@@ -587,7 +592,8 @@ void JoinMeeting()
 			pAudioContext->EnableAutoJoinAudio(true);
 		}
 	}
-	if (SendVideoRawData) {
+	if (SendVideoRawData)
+	{
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
@@ -597,7 +603,8 @@ void JoinMeeting()
 			pVideoContext->EnableAutoTurnOffVideoWhenJoinMeeting(false);
 		}
 	}
-	if (SendAudioRawData) {
+	if (SendAudioRawData)
+	{
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{

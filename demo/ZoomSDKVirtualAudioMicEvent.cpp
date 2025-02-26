@@ -56,16 +56,19 @@ void PlayAudioFileToVirtualMic(IZoomSDKAudioRawDataSender* audio_sender, string 
 
 /// \brief Callback for virtual audio mic to do some initialization.
 /// \param pSender, You can send audio data based on this object, see \link IZoomSDKAudioRawDataSender \endlink.
-void ZoomSDKVirtualAudioMicEvent::onMicInitialize(IZoomSDKAudioRawDataSender* pSender) {
+void ZoomSDKVirtualAudioMicEvent::onMicInitialize(IZoomSDKAudioRawDataSender* pSender)
+{
 	//pSender->send();	pSender_ = pSender;
 	printf("ZoomSDKVirtualAudioMicEvent OnMicInitialize, waiting for turnOn chat command\n");
 }
 
 /// \brief Callback for virtual audio mic can send raw data with 'pSender'.
-void ZoomSDKVirtualAudioMicEvent::onMicStartSend() {
+void ZoomSDKVirtualAudioMicEvent::onMicStartSend()
+{
 	printf("onMicStartSend\n");
 	std::cout << "onStartSend" << std::endl;
-	if (pSender_ && audio_play_flag != 1) {
+	if (pSender_ && audio_play_flag != 1)
+	{
 		while (audio_play_flag > -1) {}
 		audio_play_flag = 1;
 		thread(PlayAudioFileToVirtualMic, pSender_, audio_source_).detach();
@@ -73,12 +76,14 @@ void ZoomSDKVirtualAudioMicEvent::onMicStartSend() {
 }
 
 /// \brief Callback for virtual audio mic should stop send raw data.
-void ZoomSDKVirtualAudioMicEvent::onMicStopSend() {
+void ZoomSDKVirtualAudioMicEvent::onMicStopSend()
+{
 	printf("onMicStopSend\n");
 	audio_play_flag = 0;
 }
 /// \brief Callback for virtual audio mic is uninitialized.
-void ZoomSDKVirtualAudioMicEvent::onMicUninitialized() {
+void ZoomSDKVirtualAudioMicEvent::onMicUninitialized()
+{
 	std::cout << "onUninitialized" << std::endl;
 	pSender_ = nullptr;
 }
