@@ -22,8 +22,6 @@
 #include "meeting_service_components/meeting_video_interface.h"
 #include "setting_service_interface.h"
 
-
-
 //used to accept prompts
 #include "MeetingReminderEventListener.h"
 //used to listen to callbacks from meeting related matters
@@ -54,9 +52,7 @@
 
 #include <mutex>
 
-
 USING_ZOOM_SDK_NAMESPACE
-
 
 //references for SendAudioRawData
 std::string DEFAULT_AUDIO_SOURCE = "yourwavefile.wav";
@@ -64,13 +60,10 @@ std::string DEFAULT_AUDIO_SOURCE = "yourwavefile.wav";
 //references for SendVideoRawData
 std::string DEFAULT_VIDEO_SOURCE = "yourmp4file.mp4";
 
-
 GMainLoop* loop;
-
 
 //These are needed to readsettingsfromTEXT named config.txt
 std::string meeting_number, token, meeting_password, recording_token;
-
 
 //Services which are needed to initialize, authenticate and configure settings for the SDK
 ZOOM_SDK_NAMESPACE::IAuthService* m_pAuthService;
@@ -84,7 +77,6 @@ IZoomSDKRenderer* videoHelper;
 IMeetingRecordingController* m_pRecordController;
 IMeetingParticipantsController* m_pParticipantsController;
 
-
 //references for GetAudioRawData
 ZoomSDKAudioRawData* audio_source = new ZoomSDKAudioRawData();
 IZoomSDKAudioRawDataHelper* audioHelper;
@@ -93,17 +85,12 @@ IZoomSDKAudioRawDataHelper* audioHelper;
 //userID is needed for video subscription.
 unsigned int userID;
 
-
-
-
-
 //this will enable or disable logic to get raw video and raw audio
 //do note that this will be overwritten by config.txt
 bool GetVideoRawData = true;
 bool GetAudioRawData = true;
 bool SendVideoRawData = false;
 bool SendAudioRawData = false;
-
 
 //this is a helper method to get the first User ID, it is just an arbitary UserID
 uint32_t getUserID() {
@@ -131,7 +118,6 @@ IUserInfo* getUserObj() {
 
 //check if you have permission to start raw recording
 void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
-
 	if (isVideo || isAudio) {
 		m_pRecordController = m_pMeetingService->GetMeetingRecordingController();
 		SDKError err2 = m_pMeetingService->GetMeetingRecordingController()->CanStartRawRecording();
@@ -179,17 +165,13 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
 //check if you meet the requirements to send raw data
 void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 
-
 	//SendVideoRawData
 	if (isVideo) {
-
 		ZoomSDKVideoSource* virtual_camera_video_source = new ZoomSDKVideoSource(DEFAULT_VIDEO_SOURCE);
 		IZoomSDKVideoSourceHelper* p_videoSourceHelper = GetRawdataVideoSourceHelper();
 
 		if (p_videoSourceHelper) {
 			SDKError err = p_videoSourceHelper->setExternalVideoSource(virtual_camera_video_source);
-
-
 
 			if (err != SDKERR_SUCCESS) {
 				printf("attemptToStartRawVideoSending(): Failed to set external video source, error code: %d\n", err);
@@ -198,14 +180,12 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 				printf("attemptToStartRawVideoSending(): Success \n");
 				IMeetingVideoController* meetingController = m_pMeetingService->GetMeetingVideoController();
 				meetingController->UnmuteVideo();
-
 			}
 		}
 		else {
 			printf("attemptToStartRawVideoSending(): Failed to get video source helper\n");
 		}
 	}
-
 
 	//SendAudioRawData
 	if (isAudio) {
@@ -215,11 +195,7 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 			SDKError err = audioHelper->setExternalAudioSource(audio_source);
 		}
 	}
-
-
 }
-
-
 
 //callback when given host permission
 void onIsHost() {
@@ -269,7 +245,6 @@ void turnOffSendVideoandAudio() {
 
 //callback when the SDK is inmeeting
 void onInMeeting() {
-
 	printf("onInMeeting Invoked\n");
 
 	//double check if you are in a meeting
@@ -284,7 +259,6 @@ void onInMeeting() {
 	//first attempt to start raw recording  / sending, upon successfully joined and achieved "in-meeting" state.
 	CheckAndStartRawRecording(GetVideoRawData, GetAudioRawData);
 	CheckAndStartRawSending(SendVideoRawData, SendAudioRawData);
-
 }
 
 //on meeting ended, typically by host, do something here. it is possible to reuse this SDK instance
@@ -314,7 +288,6 @@ std::string getSelfDirPath()
 */
 	return std::string(dest);
 }
-
 
 // Function to process a line containing a key-value pair
 void processLine(const std::string& line, std::map<std::string, std::string>& config) {
@@ -450,9 +423,7 @@ void ReadTEXTSettings()
 	printf("directory of config file: %s\n", self_dir.c_str());
 */
 
-
 }
-
 
 void CleanSDK()
 {
@@ -568,7 +539,6 @@ void JoinMeeting()
 	m_pRecordController = m_pMeetingService->GetMeetingRecordingController();
 	m_pRecordController->SetEvent(new MeetingRecordingCtrlEventListener(&onIsGivenRecordingPermission));
 
-
 	// set event listnener for prompt handler 
 	IMeetingReminderController* meetingremindercontroller = m_pMeetingService->GetMeetingReminderController();
 	MeetingReminderEventListener* meetingremindereventlistener = new MeetingReminderEventListener();
@@ -618,7 +588,6 @@ void JoinMeeting()
 		}
 	}
 	if (SendVideoRawData) {
-
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
@@ -629,7 +598,6 @@ void JoinMeeting()
 		}
 	}
 	if (SendAudioRawData) {
-
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{
@@ -640,7 +608,6 @@ void JoinMeeting()
 
 		}
 	}
-
 
 		//attempt to join meeting
 		if (m_pMeetingService)
@@ -660,19 +627,15 @@ void JoinMeeting()
 		{
 			std::cout << "join_meeting:error" << std::endl;
 		}
-	
 }
 
 void LeaveMeeting()
 {
 	ZOOM_SDK_NAMESPACE::MeetingStatus status = ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED;
 
-
 		if (NULL == m_pMeetingService)
 		{
-
 			std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
-		
 		}
 		else
 		{
@@ -683,22 +646,17 @@ void LeaveMeeting()
 			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
 			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
 		{
-
 			std::cout << "LeaveMeeting() not in meeting " << std::endl;
-			
 		}
 
 		if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
 		{
 			std::cout << "LeaveMeeting() success " << std::endl;
-		
 		}
 		else
 		{
 			std::cout << "LeaveMeeting() error" << std::endl;
-			
 		}
-
 }
 
 //callback when authentication is compeleted
@@ -722,7 +680,6 @@ void AuthMeetingSDK()
 	//set the event listener for onauthenticationcompleted
 	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS) {};
 	std::cout << "AuthServiceEventListener added." << std::endl;
-
 
 	if (!token.size() == 0){
 		param.jwt_token = token.c_str();
@@ -774,21 +731,15 @@ void InitMeetingSDK()
 	//}
 }
 
-
-
-
 //used for non headless app 
-
 void StartMeeting()
 {
-
 	ZOOM_SDK_NAMESPACE::StartParam startParam;
 	startParam.userType = ZOOM_SDK_NAMESPACE::SDK_UT_NORMALUSER;
 	startParam.param.normaluserStart.vanityID = NULL;
 	startParam.param.normaluserStart.customer_key = NULL;
 	startParam.param.normaluserStart.isVideoOff = false;
 	startParam.param.normaluserStart.isAudioOff = false;
-
 
 	ZOOM_SDK_NAMESPACE::SDKError err = m_pMeetingService->Start(startParam);
 	if (SDKError::SDKERR_SUCCESS == err)
@@ -800,7 +751,6 @@ void StartMeeting()
 		std::cerr << "StartMeeting:error " << std::endl;
 	}
 }
-
 
 // Define a struct to hold the response data
 struct ResponseData {
@@ -814,7 +764,6 @@ static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* use
 	response->stream.write(static_cast<const char*>(contents), totalSize);
 	return totalSize;
 }
-
 
 gboolean timeout_callback(gpointer data)
 {
@@ -843,21 +792,13 @@ void initAppSettings()
 
 int main(int argc, char* argv[])
 {
-
 	ReadTEXTSettings();
-
-	
-
 	InitMeetingSDK();
 	AuthMeetingSDK();
 	initAppSettings();
-
-
-
 	loop = g_main_loop_new(NULL, FALSE);
 	// add source to default context
 	g_timeout_add(1000, timeout_callback, loop);
 	g_main_loop_run(loop);
 	return 0;
 }
-

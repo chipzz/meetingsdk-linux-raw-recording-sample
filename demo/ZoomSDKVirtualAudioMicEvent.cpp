@@ -63,14 +63,12 @@ void ZoomSDKVirtualAudioMicEvent::onMicInitialize(IZoomSDKAudioRawDataSender* pS
 
 /// \brief Callback for virtual audio mic can send raw data with 'pSender'.
 void ZoomSDKVirtualAudioMicEvent::onMicStartSend() {
-
 	printf("onMicStartSend\n");
 	std::cout << "onStartSend" << std::endl;
 	if (pSender_ && audio_play_flag != 1) {
 		while (audio_play_flag > -1) {}
 		audio_play_flag = 1;
 		thread(PlayAudioFileToVirtualMic, pSender_, audio_source_).detach();
-
 	}
 }
 

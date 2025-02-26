@@ -16,7 +16,6 @@ void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData
 	std::cout << "Received onMixedAudioRawDataReceived" << std::endl;
 	//add your code here
 
-
 	static std::ofstream pcmFile;
 	pcmFile.open("audio.pcm", std::ios::out | std::ios::binary | std::ios::app);
 
@@ -36,6 +35,7 @@ void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData
 		pcmFile.close();
 		pcmFile.flush();
 }
+
 void ZoomSDKAudioRawData::onShareAudioRawDataReceived(AudioRawData* data_)
 {
 }

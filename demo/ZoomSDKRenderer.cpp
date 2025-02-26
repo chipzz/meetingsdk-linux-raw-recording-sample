@@ -13,9 +13,6 @@
 #include <cstdint>
 #include <cstdio>
 
-
-
-
 void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 {
 	std::cout << "onRawDataFrameReceived." << std::endl;
@@ -27,9 +24,8 @@ void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 	if (data->GetStreamHeight() == 720) {
 		SaveToRawYUVFile(data);
 	}
-
-
 }
+
 void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
 {
 	std::cout << "onRawDataStatusChanged." << std::endl;
@@ -41,7 +37,6 @@ void ZoomSDKRenderer::onRendererBeDestroyed()
 }
 
 void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
-
 	//method 1
 
 	//// Open the file for writing
@@ -51,7 +46,6 @@ void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
 	//	//error opening file
 	//	return;
 	//}
-
 
 	//char* _data = new char[data->GetStreamHeight() * data->GetStreamWidth() * 3 / 2];
 
@@ -64,24 +58,19 @@ void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
 	//size_t loc = data->GetStreamHeight() * data->GetStreamWidth();
 	//memcpy(&_data[loc], data->GetUBuffer(), data->GetStreamHeight() * data->GetStreamWidth() / 4);
 
-
 	//// Copy V buffer
 	//loc = (data->GetStreamHeight() * data->GetStreamWidth()) + (data->GetStreamHeight() * data->GetStreamWidth() / 4);
 	//memcpy(&_data[loc], data->GetVBuffer(), data->GetStreamHeight() * data->GetStreamWidth() / 4);
 
-
-
 	////outputFile.write((char*)data->GetBuffer(), data->GetBufferLen());
 	//// Write the Y plane
 	//outputFile.write(_data, data->GetStreamHeight() * data->GetStreamWidth() * 3 / 2);
-
 
 	//// Close the file
 	//outputFile.close();
 	//outputFile.flush();
 	////cout << "YUV420 buffer saved to file." << endl;
 	//std::cout << "Saving Raw Data" << std::endl;
-
 
 	//method 2
 
@@ -96,21 +85,13 @@ void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data) {
 	size_t ySize = data->GetStreamWidth() * data->GetStreamHeight();
 	size_t uvSize = ySize / 4;
 
-
-
 	// Write Y, U, and V components to the output file
 	outputFile.write(data->GetYBuffer(), ySize);
 	outputFile.write(data->GetUBuffer(), uvSize);
 	outputFile.write(data->GetVBuffer(), uvSize);
 
-
 	// Close the file
 	outputFile.close();
 	outputFile.flush();
 	//cout << "YUV420 buffer saved to file." << endl;
-
-
-
-
 }
-
