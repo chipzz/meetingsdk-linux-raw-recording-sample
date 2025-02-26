@@ -23,17 +23,17 @@ void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData
 		std::cout << "Failed to open wave file" << std::endl;
 		return;
 	}
-	
-		// Write the audio data to the file
-		pcmFile.write((char*)audioRawData->GetBuffer(), audioRawData->GetBufferLen());
-		//std::cout << "buffer length: " << audioRawData->GetBufferLen() << std::endl;
+
+	// Write the audio data to the file
+	pcmFile.write((char*)audioRawData->GetBuffer(), audioRawData->GetBufferLen());
+	//std::cout << "buffer length: " << audioRawData->GetBufferLen() << std::endl;
 /*
-		std::cout << "buffer : " << audioRawData->GetBuffer() << std::endl;
+	std::cout << "buffer : " << audioRawData->GetBuffer() << std::endl;
 */
 
-		// Close the wave file
-		pcmFile.close();
-		pcmFile.flush();
+	// Close the wave file
+	pcmFile.close();
+	pcmFile.flush();
 }
 
 void ZoomSDKAudioRawData::onShareAudioRawDataReceived(AudioRawData* data_)
