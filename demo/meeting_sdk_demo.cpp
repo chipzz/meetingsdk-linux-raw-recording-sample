@@ -291,6 +291,8 @@ void turnOffSendVideoandAudio() {
 }
 
 
+bool useCamera;
+
 //callback when the SDK is inmeeting
 void onInMeeting()
 {
@@ -307,6 +309,8 @@ void onInMeeting()
 
 	//first attempt to start raw recording  / sending, upon successfully joined and achieved "in-meeting" state.
 	CheckAndStartRawRecording(GetVideoRawData, GetAudioRawData);
+	SendVideoRawData = !useCamera;
+	SendAudioRawData = !useCamera;
 	CheckAndStartRawSending(SendVideoRawData, SendAudioRawData);
 }
 
@@ -868,6 +872,7 @@ void initAppSettings()
 
 int main(int argc, char* argv[])
 {
+	useCamera = (argc > 1);
 	ReadTEXTSettings();
 	InitMeetingSDK();
 	AuthMeetingSDK();
