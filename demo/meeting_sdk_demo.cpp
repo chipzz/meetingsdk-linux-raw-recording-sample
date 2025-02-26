@@ -573,6 +573,7 @@ void JoinMeeting()
 
 	//automatically set app_privilege token if it is present in config.txt, or retrieved from web service
 	withoutloginParam.app_privilege_token = NULL;
+	/*
 	if (!recording_token.size() == 0)
 	{
 		withoutloginParam.app_privilege_token = recording_token.c_str();
@@ -583,6 +584,7 @@ void JoinMeeting()
 		withoutloginParam.app_privilege_token = NULL;
 		std::cerr << "Leaving recording token as NULL" << std::endl;
 	}
+	*/
 
 	if (GetAudioRawData)
 	{
