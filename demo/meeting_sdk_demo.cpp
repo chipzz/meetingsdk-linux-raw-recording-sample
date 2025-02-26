@@ -631,54 +631,54 @@ void JoinMeeting()
 		}
 	}
 
-		//attempt to join meeting
-		if (m_pMeetingService)
-		{
-			err = m_pMeetingService->Join(joinParam);
-		}
-		else
-		{
-			std::cout << "join_meeting m_pMeetingService:Null" << std::endl;
-		}
+	//attempt to join meeting
+	if (m_pMeetingService)
+	{
+		err = m_pMeetingService->Join(joinParam);
+	}
+	else
+	{
+		std::cout << "join_meeting m_pMeetingService:Null" << std::endl;
+	}
 
-		if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
-		{
-			std::cout << "join_meeting:success" << std::endl;
-		}
-		else
-		{
-			std::cout << "join_meeting:error" << std::endl;
-		}
+	if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
+	{
+		std::cout << "join_meeting:success" << std::endl;
+	}
+	else
+	{
+		std::cout << "join_meeting:error" << std::endl;
+	}
 }
 
 void LeaveMeeting()
 {
 	ZOOM_SDK_NAMESPACE::MeetingStatus status = ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED;
 
-		if (NULL == m_pMeetingService)
-		{
-			std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
-		}
-		else
-		{
-			status = m_pMeetingService->GetMeetingStatus();
-		}
+	if (NULL == m_pMeetingService)
+	{
+		std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
+	}
+	else
+	{
+		status = m_pMeetingService->GetMeetingStatus();
+	}
 
-		if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
-			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
-			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
-		{
-			std::cout << "LeaveMeeting() not in meeting " << std::endl;
-		}
+	if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
+		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
+		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
+	{
+		std::cout << "LeaveMeeting() not in meeting " << std::endl;
+	}
 
-		if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
-		{
-			std::cout << "LeaveMeeting() success " << std::endl;
-		}
-		else
-		{
-			std::cout << "LeaveMeeting() error" << std::endl;
-		}
+	if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
+	{
+		std::cout << "LeaveMeeting() success " << std::endl;
+	}
+	else
+	{
+		std::cout << "LeaveMeeting() error" << std::endl;
+	}
 }
 
 //callback when authentication is compeleted
