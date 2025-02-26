@@ -600,7 +600,8 @@ void JoinMeeting()
 		std::cerr << "Leaving recording token as NULL" << std::endl;
 	}
 
-	if (GetAudioRawData) {
+	if (GetAudioRawData)
+	{
 		//set join audio to true
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
@@ -609,7 +610,8 @@ void JoinMeeting()
 			pAudioContext->EnableAutoJoinAudio(true);
 		}
 	}
-	if (SendVideoRawData) {
+	if (SendVideoRawData)
+	{
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
@@ -619,7 +621,8 @@ void JoinMeeting()
 			pVideoContext->EnableAutoTurnOffVideoWhenJoinMeeting(false);
 		}
 	}
-	if (SendAudioRawData) {
+	if (SendAudioRawData)
+	{
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{

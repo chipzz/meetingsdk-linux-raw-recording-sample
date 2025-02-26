@@ -7,7 +7,8 @@ AuthServiceEventListener::AuthServiceEventListener(void(*onAuthSuccess)())
     onAuthSuccess_ = onAuthSuccess;
 }
 
-void AuthServiceEventListener::onAuthenticationReturn(ZOOM_SDK_NAMESPACE::AuthResult ret) {
+void AuthServiceEventListener::onAuthenticationReturn(ZOOM_SDK_NAMESPACE::AuthResult ret)
+{
     if (ret == ZOOM_SDK_NAMESPACE::AuthResult::AUTHRET_JWTTOKENWRONG)
     {
         // SDK Auth call failed because the JWT token is invalid.
