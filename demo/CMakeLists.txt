@@ -14,6 +14,7 @@ find_package(PkgConfig REQUIRED)
 
 # Find GLib using pkg-config
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
+pkg_check_modules(FFmpeg REQUIRED IMPORTED_TARGET libavutil libavcodec libavformat libswscale)
 
 include_directories(${CMAKE_SOURCE_DIR}/include/h)
 
@@ -46,6 +47,7 @@ add_executable(meetingSDKDemo
 
 # Link GLib libraries
 target_link_libraries(meetingSDKDemo PkgConfig::GLIB)
+target_link_libraries(meetingSDKDemo PkgConfig::FFmpeg)
 target_link_libraries(meetingSDKDemo meetingsdk)
 
 string(LENGTH "${CMAKE_SOURCE_DIR}/" CMAKE_SOURCE_DIR_LENGTH)
