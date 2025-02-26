@@ -13,9 +13,6 @@
 #include <cstdint>
 #include <cstdio>
 
-
-
-
 void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 {
 	std::cout << "onRawDataFrameReceived." << std::endl;
@@ -27,9 +24,8 @@ void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 	if (data->GetStreamHeight() == 720) {
 		SaveToRawYUVFile(data);
 	}
-
-
 }
+
 void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
 {
 	std::cout << "onRawDataStatusChanged." << std::endl;

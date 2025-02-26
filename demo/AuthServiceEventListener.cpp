@@ -4,7 +4,6 @@
 
 AuthServiceEventListener::AuthServiceEventListener(void(*onAuthSuccess)())
 {
-    
     onAuthSuccess_ = onAuthSuccess;
 }
 
@@ -27,7 +26,6 @@ void AuthServiceEventListener::onAuthenticationReturn(ZOOM_SDK_NAMESPACE::AuthRe
 void AuthServiceEventListener::onLoginReturnWithReason(LOGINSTATUS ret, IAccountInfo* pAccountInfo, LoginFailReason reason)
 {
     std::cout << "onLoginReturnWithReason: " << reason << std::endl;
-  
 }
 
 void AuthServiceEventListener::onLogout()
@@ -49,4 +47,3 @@ void AuthServiceEventListener::onZoomAuthIdentityExpired()
 // {
 //     std::cout << "onNotificationServiceStatus: " << status << std::endl;
 // }
-

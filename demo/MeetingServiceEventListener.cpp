@@ -52,10 +52,7 @@ void MeetingServiceEventListener::onMeetingStatusChanged(MeetingStatus status, i
 	case MEETING_STATUS_IN_WAITING_ROOM:
 		printf("Participants who join the meeting before the start are in the waiting room.\n");
 		break;
-
-
 	}
-
 }
 
 void MeetingServiceEventListener::onMeetingStatisticsWarningNotification(StatisticsWarningType type)
@@ -83,5 +80,4 @@ void MeetingServiceEventListener::onSuspendParticipantsActivities()
 
 void MeetingServiceEventListener::onMeetingFullToWatchLiveStream(const zchar_t* sLiveStreamUrl)
 {
-
 }

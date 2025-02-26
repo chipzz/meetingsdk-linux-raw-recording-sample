@@ -179,17 +179,13 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio) {
 //check if you meet the requirements to send raw data
 void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 
-
 	//SendVideoRawData
 	if (isVideo) {
-
 		ZoomSDKVideoSource* virtual_camera_video_source = new ZoomSDKVideoSource(DEFAULT_VIDEO_SOURCE);
 		IZoomSDKVideoSourceHelper* p_videoSourceHelper = GetRawdataVideoSourceHelper();
 
 		if (p_videoSourceHelper) {
 			SDKError err = p_videoSourceHelper->setExternalVideoSource(virtual_camera_video_source);
-
-
 
 			if (err != SDKERR_SUCCESS) {
 				printf("attemptToStartRawVideoSending(): Failed to set external video source, error code: %d\n", err);
@@ -198,14 +194,12 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 				printf("attemptToStartRawVideoSending(): Success \n");
 				IMeetingVideoController* meetingController = m_pMeetingService->GetMeetingVideoController();
 				meetingController->UnmuteVideo();
-
 			}
 		}
 		else {
 			printf("attemptToStartRawVideoSending(): Failed to get video source helper\n");
 		}
 	}
-
 
 	//SendAudioRawData
 	if (isAudio) {
@@ -215,8 +209,6 @@ void CheckAndStartRawSending(bool isVideo, bool isAudio) {
 			SDKError err = audioHelper->setExternalAudioSource(audio_source);
 		}
 	}
-
-
 }
 
 
@@ -618,7 +610,6 @@ void JoinMeeting()
 		}
 	}
 	if (SendVideoRawData) {
-
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
@@ -629,7 +620,6 @@ void JoinMeeting()
 		}
 	}
 	if (SendAudioRawData) {
-
 		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{
@@ -640,7 +630,6 @@ void JoinMeeting()
 
 		}
 	}
-
 
 		//attempt to join meeting
 		if (m_pMeetingService)
@@ -660,19 +649,15 @@ void JoinMeeting()
 		{
 			std::cout << "join_meeting:error" << std::endl;
 		}
-	
 }
 
 void LeaveMeeting()
 {
 	ZOOM_SDK_NAMESPACE::MeetingStatus status = ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED;
 
-
 		if (NULL == m_pMeetingService)
 		{
-
 			std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
-		
 		}
 		else
 		{
@@ -683,22 +668,17 @@ void LeaveMeeting()
 			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
 			status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
 		{
-
 			std::cout << "LeaveMeeting() not in meeting " << std::endl;
-			
 		}
 
 		if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
 		{
 			std::cout << "LeaveMeeting() success " << std::endl;
-		
 		}
 		else
 		{
 			std::cout << "LeaveMeeting() error" << std::endl;
-			
 		}
-
 }
 
 //callback when authentication is compeleted
@@ -722,7 +702,6 @@ void AuthMeetingSDK()
 	//set the event listener for onauthenticationcompleted
 	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS) {};
 	std::cout << "AuthServiceEventListener added." << std::endl;
-
 
 	if (!token.size() == 0){
 		param.jwt_token = token.c_str();
@@ -843,21 +822,13 @@ void initAppSettings()
 
 int main(int argc, char* argv[])
 {
-
 	ReadTEXTSettings();
-
-	
-
 	InitMeetingSDK();
 	AuthMeetingSDK();
 	initAppSettings();
-
-
-
 	loop = g_main_loop_new(NULL, FALSE);
 	// add source to default context
 	g_timeout_add(1000, timeout_callback, loop);
 	g_main_loop_run(loop);
 	return 0;
 }
-

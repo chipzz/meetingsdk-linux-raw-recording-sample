@@ -8,7 +8,6 @@
 #include <cstdio>
 #include <chrono>
 
-
 //using namespace cv;
 using namespace std;
 
@@ -16,14 +15,11 @@ int video_play_flag = -1;
 int width = WIDTH;
 int height = HEIGHT;
 
-
-
 void PlayVideoFileToVirtualCamera(IZoomSDKVideoSender* video_sender, const std::string& video_source) {
-
     //implement your code to read from a file, and send it using video_sender
     // you can use ffmpeg to convert your video file into yuv420p format, read the frames and send each frame using video_sender
-
 }
+
 void ZoomSDKVideoSource::onInitialize(IZoomSDKVideoSender* sender, IList<VideoSourceCapability>* support_cap_list, VideoSourceCapability& suggest_cap)
 {
     std::cout << "ZoomSDKVideoSource onInitialize waiting for turnOn chat command" << endl;
@@ -69,4 +65,3 @@ ZoomSDKVideoSource::ZoomSDKVideoSource(string video_source)
 {
     video_source_ = video_source;
 }
-
