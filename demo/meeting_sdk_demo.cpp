@@ -724,6 +724,8 @@ void AuthMeetingSDK()
 	//}
 }
 
+const char *const proxy = "127.0.0.1:8080";
+
 void InitMeetingSDK()
 {
 	ZOOM_SDK_NAMESPACE::SDKError err(ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS);
@@ -750,13 +752,21 @@ void InitMeetingSDK()
 	}
 
 	//use connection helper
-	/*
 	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
 		std::cout << "CreateNetworkConnectionHelper created." << std::endl;
 	}
 	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
-		std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
+		std::cout << "NetworkConnectionHelper registering NetworkConnectionHandler." << std::endl;
 	}
+	/*
+	ProxySettings proxy_setting;
+	proxy_setting.proxy = proxy;
+//	proxy_setting.auto_detect = true;
+	if ((err = network_connection_helper->ConfigureProxy(proxy_setting)) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "Proxy configured" << std::endl;
+	}
+	else
+		std::cerr << err << endl;
 	*/
 }
 
