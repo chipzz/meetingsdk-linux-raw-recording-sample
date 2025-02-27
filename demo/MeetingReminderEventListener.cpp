@@ -1,5 +1,18 @@
 #include "MeetingReminderEventListener.h" // Include the header file you've created
 #include <stdlib.h>
+#include <string>
+
+std::string ToString(IMeetingReminderContent* content)
+{
+	return "MeetingReminderContent";
+}
+
+std::string ToJSONString(IMeetingReminderContent* content)
+{
+	return "MeetingReminderContent";
+}
+
+#include "Log.h"
 #include <iostream>
 
 // You might need to include additional headers here if required
@@ -10,10 +23,12 @@
 
 MeetingReminderEventListener::MeetingReminderEventListener()
 {
+    LOG_CALLBACK("MeetingReminderEventListener", "MeetingReminderEventListener");
 }
 
 void MeetingReminderEventListener::onReminderNotify(IMeetingReminderContent* content, IMeetingReminderHandler* handle)
 {
+    LOG_CALLBACK("MeetingReminderEventListener", "MeetingReminderEventListener", content);
     if (content)
     {
         // Handle the reminder dialog content
@@ -43,4 +58,5 @@ void MeetingReminderEventListener::onReminderNotify(IMeetingReminderContent* con
 
 void MeetingReminderEventListener::onEnableReminderNotify(IMeetingReminderContent* content, IMeetingEnableReminderHandler* handle)
 {
+    LOG_CALLBACK("MeetingReminderEventListener", "onEnableReminderNotify", content);
 }

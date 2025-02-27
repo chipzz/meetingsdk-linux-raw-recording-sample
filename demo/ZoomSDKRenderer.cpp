@@ -2,6 +2,51 @@
 
 #include "rawdata/rawdata_video_source_helper_interface.h"
 #include "ZoomSDKRenderer.h"
+#include "Serialisation.h"
+
+std::string ToString(IZoomSDKRendererDelegate::RawDataStatus &status)
+{
+	switch (status)
+	{
+		case IZoomSDKRendererDelegate::RawDataStatus::RawData_On: return "On"; break;
+		case IZoomSDKRendererDelegate::RawDataStatus::RawData_Off: return "Off"; break;
+	}
+	return "";
+}
+
+std::string ToJSONString(IZoomSDKRendererDelegate::RawDataStatus &status)
+{
+	return ToString(status); // FIXME: Should be int
+}
+
+std::string ToJSONString(YUVRawDataI420 *yuvRawDataI420)
+{
+	std::string t("{ \"canAddRef\": ");
+	t.append(ToJSONString(yuvRawDataI420->CanAddRef()));
+	t.append(", \"bufferLen\": ");
+	t.append(ToJSONString(yuvRawDataI420->GetBufferLen()));
+	t.append(", \"limitedI420\": ");
+	t.append(ToJSONString(yuvRawDataI420->IsLimitedI420()));
+	t.append(", \"streamWidth\": ");
+	t.append(ToJSONString(yuvRawDataI420->GetStreamWidth()));
+	t.append(", \"streamHeight\": ");
+	t.append(ToJSONString(yuvRawDataI420->GetStreamHeight()));
+	t.append(", \"rotation\": ");
+	t.append(ToJSONString(yuvRawDataI420->GetRotation()));
+	t.append(", \"sourceID\": ");
+	t.append(ToJSONString(yuvRawDataI420->GetSourceID()));
+	t.append(", \"buffer\": ");
+	t.append("null");
+	t.append(" }");
+	return t;
+}
+
+std::string ToString(YUVRawDataI420 *yuvRawDataI420)
+{
+	return ToJSONString(yuvRawDataI420);
+}
+
+#include "Log.h"
 #include "zoom_sdk_def.h" 
 #include <iostream>
 
@@ -15,11 +60,7 @@
 
 void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 {
-	std::cout << "onRawDataFrameReceived." << std::endl;
-
-	std::cout << "width." << data->GetStreamWidth() << std::endl;
-	std::cout << "height." << data->GetStreamHeight() << std::endl;
-	//std::cout << "sourceID." << data->GetSourceID() << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataFrameReceived", data);
 
 	if (data->GetStreamHeight() == 720) {
 		SaveToRawYUVFile(data);
@@ -28,12 +69,12 @@ void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
 
 void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
 {
-	std::cout << "onRawDataStatusChanged." << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataStatusChanged", status);
 }
 
 void ZoomSDKRenderer::onRendererBeDestroyed()
 {
-	std::cout << "onRendererBeDestroyed ." << std::endl;
+	LOG_CALLBACK("ZoomSDKRenderer", "onRendererBeDestroyed");
 }
 
 void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data)

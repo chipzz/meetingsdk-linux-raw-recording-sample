@@ -1,19 +1,45 @@
 //GetAudioRawData
 #include "rawdata/rawdata_audio_helper_interface.h"
 #include "ZoomSDKAudioRawData.h"
+#include "Serialisation.h"
+
+std::string ToJSONString(AudioRawData *audioRawData)
+{
+	if (!audioRawData)
+		return "null";
+
+	std::string t("{ \"canAddRef\": ");
+	t.append(ToJSONString(audioRawData->CanAddRef()));
+	t.append(", \"bufferLen\": ");
+	t.append(ToJSONString(audioRawData->GetBufferLen()));
+	t.append(", \"sampleRate\": ");
+	t.append(ToJSONString(audioRawData->GetSampleRate()));
+	t.append(", \"channelNum\": ");
+	t.append(ToJSONString(audioRawData->GetChannelNum()));
+	t.append(", \"buffer\": ");
+	t.append("null");
+	t.append(" }");
+	return t;
+}
+
+std::string ToString(AudioRawData *audioRawData)
+{
+	return ToJSONString(audioRawData);
+}
+
+#include "Log.h"
 #include "zoom_sdk_def.h" 
 #include <iostream>
 #include <fstream>
 
 void ZoomSDKAudioRawData::onOneWayAudioRawDataReceived(AudioRawData* audioRawData, uint32_t node_id)
 {
-	//std::cout << "Received onOneWayAudioRawDataReceived" << std::endl;
-	//add your code here
+	LOG_CALLBACK("ZoomSDKAudioRawData", "onOneWayAudioRawDataReceived", audioRawData, node_id);
 }
 
 void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData)
 {
-	std::cout << "Received onMixedAudioRawDataReceived" << std::endl;
+	LOG_CALLBACK("ZoomSDKAudioRawData", "onMixedAudioRawDataReceived", audioRawData);
 	//add your code here
 
 	static std::ofstream pcmFile;
@@ -38,8 +64,10 @@ void ZoomSDKAudioRawData::onMixedAudioRawDataReceived(AudioRawData* audioRawData
 
 void ZoomSDKAudioRawData::onShareAudioRawDataReceived(AudioRawData* data_)
 {
+	LOG_CALLBACK("ZoomSDKAudioRawData", "onShareAudioRawDataReceived", data_);
 }
 
 void ZoomSDKAudioRawData::onOneWayInterpreterAudioRawDataReceived(AudioRawData* data_, const zchar_t* pLanguageName)
 {
+	LOG_CALLBACK("ZoomSDKAudioRawData", "onOneWayInterpreterAudioRawDataReceived", data_, pLanguageName);
 }
