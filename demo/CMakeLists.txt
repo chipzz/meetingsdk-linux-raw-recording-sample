@@ -41,11 +41,15 @@ add_executable(meetingSDKDemo
               ${CMAKE_SOURCE_DIR}/ZoomSDKVideoSource.cpp
               ${CMAKE_SOURCE_DIR}/ZoomSDKVirtualAudioMicEvent.h
               ${CMAKE_SOURCE_DIR}/ZoomSDKVirtualAudioMicEvent.cpp
+	Log.cpp
               )
 
 # Link GLib libraries
 target_link_libraries(meetingSDKDemo PkgConfig::GLIB)
 target_link_libraries(meetingSDKDemo meetingsdk)
+
+string(LENGTH "${CMAKE_SOURCE_DIR}/" CMAKE_SOURCE_DIR_LENGTH)
+target_compile_definitions(meetingSDKDemo PRIVATE "CMAKE_SOURCE_DIR_LENGTH=${CMAKE_SOURCE_DIR_LENGTH}")
 
 # Create a symbolic link
 file(CREATE_LINK "${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/libmeetingsdk.so" "${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/libmeetingsdk.so.1" SYMBOLIC)

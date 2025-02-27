@@ -1,9 +1,7 @@
 //SendVideoRawData
 
 #include "ZoomSDKVideoSource.h"
-#include <iostream>
-#include <thread> 
-#include <iostream>
+#include "Log.h"
 #include <string>
 #include <cstdio>
 #include <chrono>
@@ -23,13 +21,14 @@ void PlayVideoFileToVirtualCamera(IZoomSDKVideoSender* video_sender, const std::
 
 void ZoomSDKVideoSource::onInitialize(IZoomSDKVideoSender* sender, IList<VideoSourceCapability>* support_cap_list, VideoSourceCapability& suggest_cap)
 {
-    std::cout << "ZoomSDKVideoSource onInitialize waiting for turnOn chat command" << endl;
+    LOG_CALLBACK("ZoomSDKVideoSource", "onInitialize");
+    std::cout << "Waiting for turnOn chat command" << endl;
     video_sender_ = sender;
 }
 
 void ZoomSDKVideoSource::onPropertyChange(IList<VideoSourceCapability>* support_cap_list, VideoSourceCapability suggest_cap)
 {
-    std::cout << "onPropertyChange" << endl;
+    LOG_CALLBACK("ZoomSDKVideoSource", "onPropertyChange");
     std::cout << "suggest frame: " << suggest_cap.frame << endl;
     std::cout << "suggest size: " << suggest_cap.width << "x" << suggest_cap.height << endl;
     width = suggest_cap.width;
@@ -39,7 +38,7 @@ void ZoomSDKVideoSource::onPropertyChange(IList<VideoSourceCapability>* support_
 
 void ZoomSDKVideoSource::onStartSend()
 {
-    std::cout << "onStartSend" << endl;
+    LOG_CALLBACK("ZoomSDKVideoSource", "onStartSend");
     if (video_sender_ && video_play_flag != 1)
     {
         while (video_play_flag > -1) {}
@@ -54,17 +53,18 @@ void ZoomSDKVideoSource::onStartSend()
 
 void ZoomSDKVideoSource::onStopSend()
 {
-    std::cout << "onCameraStopSend" << endl;
+    LOG_CALLBACK("ZoomSDKVideoSource", "onStopSend");
     video_play_flag = 0;
 }
 
 void ZoomSDKVideoSource::onUninitialized()
 {
-    std::cout << "onUninitialized" << endl;
+    LOG_CALLBACK("ZoomSDKVideoSource", "onUninitialized");
     video_sender_ = nullptr;
 }
 
 ZoomSDKVideoSource::ZoomSDKVideoSource(string video_source)
 {
+    LOG_CALLBACK("ZoomSDKVideoSource", "ZoomSDKVideoSource", video_source);
     video_source_ = video_source;
 }
