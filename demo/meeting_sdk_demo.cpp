@@ -454,11 +454,13 @@ void CleanSDK()
 	{
 		audioHelper->unSubscribe();
 	}
-	//if (_network_connection_helper)
-	//{
-	//	ZOOM_SDK_NAMESPACE::DestroyNetworkConnectionHelper(_network_connection_helper);
-	//	_network_connection_helper = NULL;
-	//}
+	/*
+	if (network_connection_helper)
+	{
+		ZOOM_SDK_NAMESPACE::DestroyNetworkConnectionHelper(network_connection_helper);
+		network_connection_helper = NULL;
+	}
+	*/
 	//attempt to clean up SDK
 	err = ZOOM_SDK_NAMESPACE::CleanUPSDK();
 	if (err != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
@@ -730,12 +732,14 @@ void InitMeetingSDK()
 	}
 
 	//use connection helper
-	//if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
-	//	std::cout << "CreateNetworkConnectionHelper created." << std::endl;
-	//}
-	//if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
-	//	std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
-	//}
+	/*
+	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "CreateNetworkConnectionHelper created." << std::endl;
+	}
+	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
+	}
+	*/
 }
 
 //used for non headless app 
