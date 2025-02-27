@@ -1,7 +1,7 @@
 #include <zoom_sdk.h>
 #include <network_connection_handler_interface.h>
 
-using namespace ZOOMSDK;
+USING_ZOOM_SDK_NAMESPACE
 
 class NetworkConnectionHandler :
 	public INetworkConnectionHandler

@@ -12,12 +12,12 @@ MeetingReminderEventListener::MeetingReminderEventListener()
 {
 }
 
-void MeetingReminderEventListener::onReminderNotify(ZOOMSDK::IMeetingReminderContent* content, ZOOMSDK::IMeetingReminderHandler* handle)
+void MeetingReminderEventListener::onReminderNotify(IMeetingReminderContent* content, IMeetingReminderHandler* handle)
 {
     if (content)
     {
         // Handle the reminder dialog content
-        ZOOMSDK::MeetingReminderType type = content->GetType();
+        MeetingReminderType type = content->GetType();
         const zchar_t* title = content->GetTitle();
         const zchar_t* dialogContent = content->GetContent();
         bool isBlocking = content->IsBlocking();

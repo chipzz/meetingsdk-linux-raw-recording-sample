@@ -8,7 +8,7 @@ constexpr auto WIDTH = 640;
 constexpr auto HEIGHT = 480;
 
 using namespace std;
-using namespace ZOOMSDK;
+USING_ZOOM_SDK_NAMESPACE
 
 class ZoomSDKVideoSource :
 	public IZoomSDKVideoSource

@@ -8,7 +8,7 @@
 
 
 using namespace std;
-using namespace ZOOMSDK;
+USING_ZOOM_SDK_NAMESPACE
 
 class ZoomSDKVirtualAudioMicEvent :
 	public IZoomSDKVirtualAudioMicEvent
