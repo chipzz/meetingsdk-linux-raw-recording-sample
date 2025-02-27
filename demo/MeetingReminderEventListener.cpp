@@ -12,7 +12,7 @@ MeetingReminderEventListener::MeetingReminderEventListener()
 {
 }
 
-void MeetingReminderEventListener::onReminderNotify(ZOOMSDK::IMeetingReminderContent* content, ZOOMSDK::IMeetingReminderHandler* handle)
+void MeetingReminderEventListener::onReminderNotify(IMeetingReminderContent* content, IMeetingReminderHandler* handle)
 {
     if (content)
     {
