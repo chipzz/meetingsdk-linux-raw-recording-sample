@@ -748,12 +748,14 @@ void InitMeetingSDK()
 	}
 
 	//use connection helper
-	//if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
-	//	std::cout << "CreateNetworkConnectionHelper created." << std::endl;
-	//}
-	//if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
-	//	std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
-	//}
+	/*
+	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "CreateNetworkConnectionHelper created." << std::endl;
+	}
+	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
+		std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
+	}
+	*/
 }
 
 
