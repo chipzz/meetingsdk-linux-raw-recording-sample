@@ -165,6 +165,7 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio)
 
 //check if you meet the requirements to send raw data
 void CheckAndStartRawSending(bool isVideo, bool isAudio) {
+	std::cout << "CheckAndStartRawSending(" << isVideo << ", " << isAudio << ")" << std::endl;
 
 	//SendVideoRawData
 	if (isVideo) {
