@@ -664,6 +664,7 @@ void LeaveMeeting()
 	if (NULL == m_pMeetingService)
 	{
 		std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
+		return;
 	}
 	else
 	{
@@ -673,18 +674,11 @@ void LeaveMeeting()
 	if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
 		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
 		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
-	{
-		std::cout << "LeaveMeeting() not in meeting " << std::endl;
-	}
+		return;
 
-	if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
-	{
-		std::cout << "LeaveMeeting() success " << std::endl;
-	}
-	else
-	{
-		std::cout << "LeaveMeeting() error" << std::endl;
-	}
+	SDKError err = m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING);
+	if (err != SDKError::SDKERR_SUCCESS)
+		std::cout << "LeaveMeeting() " << err << std::endl;
 }
 
 //callback when authentication is compeleted
