@@ -60,7 +60,7 @@ void MeetingServiceEventListener::onMeetingStatisticsWarningNotification(Statist
 	std::cout << "onMeetingStatisticsWarningNotification, type: " << type << std::endl;
 }
 
-void MeetingServiceEventListener::onMeetingParameterNotification(const MeetingParameter* meeting_param)
+void MeetingServiceEventListener::onMeetingParameterNotification(const MeetingParameter *meeting_param)
 {
 	std::cout << "onMeetingParameterNotification" << std::endl;
 	if (onMeetingStarts_) onMeetingStarts_();
