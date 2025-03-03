@@ -1,14 +1,25 @@
 #include "MeetingReminderEventListener.h" // Include the header file you've created
 #include "Serialisation.h"
 
-std::string ToString(IMeetingReminderContent *content)
-{
-	return "MeetingReminderContent";
-}
-
 std::string ToJSONString(IMeetingReminderContent *content)
 {
-	return "MeetingReminderContent";
+	if (!content)
+		return "null";
+
+	return ToJSONString
+	(
+		"title", content->GetTitle(),
+		"content", content->GetContent(),
+		"blocking", content->IsBlocking()
+	);
+	/*
+	GetType, GetActionType, GetMultiReminderTypes
+	*/
+}
+
+std::string ToString(IMeetingReminderContent *content)
+{
+	return ToJSONString(content);
 }
 
 #include "Log.h"
