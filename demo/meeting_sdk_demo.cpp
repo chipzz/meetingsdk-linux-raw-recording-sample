@@ -158,7 +158,7 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio)
 			}
 		}
 		else {
-			std::cout << "Cannot start raw recording: no permissions yet, need host, co-host, or recording privilege" << std::endl;
+			std::cout << "Cannot start raw recording: no permissions yet, need host, co-host, or recording privilege " << err2 << std::endl;
 		}
 	}
 }
