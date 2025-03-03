@@ -1,6 +1,7 @@
 #include "Serialisation.h"
 #include <vector>
 #include <iostream>
+#include <chrono>
 
 struct CallbackLog
 {
@@ -10,6 +11,7 @@ struct CallbackLog
 	const char *const function;
 	std::vector<std::string> string_args;
 	std::vector<std::string> json_args;
+	std::chrono::time_point<std::chrono::system_clock> start_time;
 
 	void print(std::ostream &s) const
 	{
@@ -43,7 +45,8 @@ struct CallbackLog
 		file(file + 48),
 		line(line),
 		singleton(singleton),
-		function(function)
+		function(function),
+		start_time(std::chrono::system_clock::now())
 	{
 	}
 
