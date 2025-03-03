@@ -53,7 +53,6 @@ std::string ToString(YUVRawDataI420 *yuvRawDataI420)
 
 #include <fstream>
 #include <cstring>
-#include <string>
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>

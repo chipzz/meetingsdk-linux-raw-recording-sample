@@ -1,13 +1,12 @@
 #include "MeetingReminderEventListener.h" // Include the header file you've created
-#include <stdlib.h>
-#include <string>
+#include "Serialisation.h"
 
-std::string ToString(IMeetingReminderContent* content)
+std::string ToString(IMeetingReminderContent *content)
 {
 	return "MeetingReminderContent";
 }
 
-std::string ToJSONString(IMeetingReminderContent* content)
+std::string ToJSONString(IMeetingReminderContent *content)
 {
 	return "MeetingReminderContent";
 }
