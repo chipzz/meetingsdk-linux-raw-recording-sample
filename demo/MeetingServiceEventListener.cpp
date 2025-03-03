@@ -53,22 +53,16 @@ std::string ToJSONString(const MeetingParameter *meeting_param)
 	if (!meeting_param)
 		return "null";
 
-	std::string t("{ \"meeting_number\": ");
-	t.append(ToJSONString(meeting_param->meeting_number));
-	t.append(", \"meeting_type\": ");
-	t.append(ToJSONString(meeting_param->meeting_type));
-	t.append(", \"meeting_topic\": ");
-	t.append(ToJSONString(meeting_param->meeting_topic));
-	t.append(", \"meeting_host\": ");
-	t.append(ToJSONString(meeting_param->meeting_host));
-	t.append(", \"is_view_only\": ");
-	t.append(ToJSONString(meeting_param->is_view_only));
-	t.append(", \"is_auto_recording_local\": ");
-	t.append(ToJSONString(meeting_param->is_auto_recording_local));
-	t.append(", \"is_auto_recording_cloud\": ");
-	t.append(ToJSONString(meeting_param->is_auto_recording_cloud));
-	t.append(" }");
-	return t;
+	return ToJSONString
+	(
+		"meeting_number", meeting_param->meeting_number,
+		"meeting_type", meeting_param->meeting_type,
+		"meeting_topic", meeting_param->meeting_topic,
+		"meeting_host", meeting_param->meeting_host,
+		"is_view_only", meeting_param->is_view_only,
+		"is_auto_recording_local", meeting_param->is_auto_recording_local,
+		"is_auto_recording_cloud", meeting_param->is_auto_recording_cloud
+	);
 }
 
 std::string ToString(const MeetingParameter *meeting_param)

@@ -8,18 +8,14 @@ std::string ToJSONString(AudioRawData *audioRawData)
 	if (!audioRawData)
 		return "null";
 
-	std::string t("{ \"canAddRef\": ");
-	t.append(ToJSONString(audioRawData->CanAddRef()));
-	t.append(", \"bufferLen\": ");
-	t.append(ToJSONString(audioRawData->GetBufferLen()));
-	t.append(", \"sampleRate\": ");
-	t.append(ToJSONString(audioRawData->GetSampleRate()));
-	t.append(", \"channelNum\": ");
-	t.append(ToJSONString(audioRawData->GetChannelNum()));
-	t.append(", \"buffer\": ");
-	t.append("null");
-	t.append(" }");
-	return t;
+	return ToJSONString
+	(
+		"canAddRef", audioRawData->CanAddRef(),
+		"bufferLen", audioRawData->GetBufferLen(),
+		"sampleRate", audioRawData->GetSampleRate(),
+		"channelNum", audioRawData->GetChannelNum(),
+		"buffer", ""
+	);
 }
 
 std::string ToString(AudioRawData *audioRawData)

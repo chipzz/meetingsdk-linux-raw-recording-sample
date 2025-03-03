@@ -21,24 +21,20 @@ std::string ToJSONString(IZoomSDKRendererDelegate::RawDataStatus &status)
 
 std::string ToJSONString(YUVRawDataI420 *yuvRawDataI420)
 {
-	std::string t("{ \"canAddRef\": ");
-	t.append(ToJSONString(yuvRawDataI420->CanAddRef()));
-	t.append(", \"bufferLen\": ");
-	t.append(ToJSONString(yuvRawDataI420->GetBufferLen()));
-	t.append(", \"limitedI420\": ");
-	t.append(ToJSONString(yuvRawDataI420->IsLimitedI420()));
-	t.append(", \"streamWidth\": ");
-	t.append(ToJSONString(yuvRawDataI420->GetStreamWidth()));
-	t.append(", \"streamHeight\": ");
-	t.append(ToJSONString(yuvRawDataI420->GetStreamHeight()));
-	t.append(", \"rotation\": ");
-	t.append(ToJSONString(yuvRawDataI420->GetRotation()));
-	t.append(", \"sourceID\": ");
-	t.append(ToJSONString(yuvRawDataI420->GetSourceID()));
-	t.append(", \"buffer\": ");
-	t.append("null");
-	t.append(" }");
-	return t;
+	if (!yuvRawDataI420)
+		return "null";
+
+	return ToJSONString
+	(
+		"canAddRef", yuvRawDataI420->CanAddRef(),
+		"bufferLen", yuvRawDataI420->GetBufferLen(),
+		"limitedI420", yuvRawDataI420->IsLimitedI420(),
+		"streamWidth", yuvRawDataI420->GetStreamWidth(),
+		"streamHeight", yuvRawDataI420->GetStreamHeight(),
+		"rotation", yuvRawDataI420->GetRotation(),
+		"sourceID", yuvRawDataI420->GetSourceID(),
+		"buffer", ""
+	);
 }
 
 std::string ToString(YUVRawDataI420 *yuvRawDataI420)
