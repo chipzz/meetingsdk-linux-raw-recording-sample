@@ -31,3 +31,6 @@ git rm --cached config.json
 
 /demo/config.txt
 /demo/lib/zoom_meeting_sdk/images
+demo/audio.pcm
+demo/output.yuv
+demo/yourmp4file.mp4
