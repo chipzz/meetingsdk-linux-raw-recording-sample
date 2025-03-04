@@ -67,9 +67,11 @@ void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
 	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataStatusChanged", status);
 }
 
+extern IZoomSDKRenderer *videoHelper;
 void ZoomSDKRenderer::onRendererBeDestroyed()
 {
 	LOG_CALLBACK("ZoomSDKRenderer", "onRendererBeDestroyed");
+	videoHelper = nullptr;
 }
 
 void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data)
