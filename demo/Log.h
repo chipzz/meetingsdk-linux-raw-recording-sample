@@ -1,9 +1,11 @@
 #include "Serialisation.h"
 #include <vector>
 #include <iostream>
+#include <chrono>
 
 struct CallbackLog
 {
+	std::chrono::time_point<std::chrono::system_clock> start_time;
 	const char *const file;
 	const unsigned int line;
 	const char *const singleton;

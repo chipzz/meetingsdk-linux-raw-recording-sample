@@ -52,6 +52,8 @@ std::string ToJSONString(bool b)
 
 void CallbackLog::print(std::ostream &s) const
 {
+	std::chrono::milliseconds::rep const c = std::chrono::duration_cast<std::chrono::microseconds>(start_time.time_since_epoch()).count();
+	s << (c / 1000000) << "." << (c % 1000000) << " ";
 	s << file << ':' << line << '\t';
 	if (singleton)
 		s << singleton << '.';
@@ -79,6 +81,7 @@ CallbackLog::CallbackLog
 	const char *const singleton,
 	const char *const function
 ) :
+	start_time(std::chrono::system_clock::now()),
 	file(file + CMAKE_SOURCE_DIR_LENGTH),
 	line(line),
 	singleton(singleton),
