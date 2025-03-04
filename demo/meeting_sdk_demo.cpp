@@ -484,25 +484,39 @@ void CleanSDK()
 
 	if (m_pAuthService)
 	{
-		DestroyAuthService(m_pAuthService);
+		std::cerr << "DestroyAuthService";
+		IAuthService *const pAuthService = m_pAuthService;
 		m_pAuthService = NULL;
+		if ((err = DestroyAuthService(pAuthService)) != SDKERR_SUCCESS)
+			std::cerr << " " << err;
+		std::cerr << std::endl;
 	}
 	if (m_pSettingService)
 	{
-		DestroySettingService(m_pSettingService);
+		std::cerr << "DestroySettingService";
+		ISettingService *const pSettingService = m_pSettingService;
 		m_pSettingService = NULL;
+		if ((err = DestroySettingService(pSettingService)) != SDKERR_SUCCESS)
+			std::cerr << " " << err;
+		std::cerr << std::endl;
 	}
 	if (m_pMeetingService)
 	{
-		DestroyMeetingService(m_pMeetingService);
+		std::cerr << "DestroyMeetingService";
+		IMeetingService *const pMeetingService = m_pMeetingService;
 		m_pMeetingService = NULL;
+		if ((err = DestroyMeetingService(pMeetingService)) != SDKERR_SUCCESS)
+			std::cerr << " " << err;
+		std::cerr << std::endl;
 	}
 	if (videoHelper)
 	{
+		std::cerr << "Unsubscribing videoHelper" << std::endl;
 		videoHelper->unSubscribe();
 	}
 	if (audioHelper)
 	{
+		std::cerr << "Unsubscribing audioHelper" << std::endl;
 		audioHelper->unSubscribe();
 	}
 	/*
@@ -513,15 +527,8 @@ void CleanSDK()
 	}
 	*/
 	//attempt to clean up SDK
-	err = CleanUPSDK();
-	if (err != SDKERR_SUCCESS)
-	{
-		std::cerr << "CleanSDK meetingSdk:error " << std::endl;
-	}
-	else
-	{
-		std::cerr << "CleanSDK meetingSdk:success" << std::endl;
-	}
+	if ((err = CleanUPSDK()) != SDKERR_SUCCESS)
+		std::cerr << "CleanUPSDK error " << err << std::endl;
 }
 
 void changeMicrophoneAndSpeaker() {
