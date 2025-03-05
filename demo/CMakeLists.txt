@@ -1,13 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 
 project(meetingSDKDemo CXX)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-add_definitions(-std=c++11)
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_BUILD_TYPE Debug)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 find_package(PkgConfig REQUIRED)
@@ -16,9 +12,13 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GLIB REQUIRED IMPORTED_TARGET glib-2.0)
 pkg_check_modules(FFmpeg REQUIRED IMPORTED_TARGET libavutil libavcodec libavformat libswscale)
 
-include_directories(${CMAKE_SOURCE_DIR}/include/h)
+find_path(MEETINGSDK_INCLUDEDIR zoom_sdk.h PATHS . PATH_SUFFIXES include/h REQUIRED)
+#find_path(MEETINGSDK_LIBDIR libmeetingsdk.so PATHS . PATH_SUFFIXES lib/zoom_meeting_sdk REQUIRED)
+find_library(MEETINGSDK_LIBRARIES NAMES meetingsdk PATHS . PATH_SUFFIXES lib/zoom_meeting_sdk REQUIRED)
 
-link_directories(${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk)
+add_library(meetingsdk SHARED IMPORTED)
+set_target_properties(meetingsdk PROPERTIES IMPORTED_LOCATION ${MEETINGSDK_LIBRARIES})
+target_include_directories(meetingsdk INTERFACE ${MEETINGSDK_INCLUDEDIR})
 
 add_executable(meetingSDKDemo 
               ${CMAKE_SOURCE_DIR}/meeting_sdk_demo.cpp
@@ -56,6 +56,6 @@ target_compile_definitions(meetingSDKDemo PRIVATE "CMAKE_SOURCE_DIR_LENGTH=${CMA
 # Create a symbolic link
 file(CREATE_LINK "${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/libmeetingsdk.so" "${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/libmeetingsdk.so.1" SYMBOLIC)
 
-configure_file(${CMAKE_SOURCE_DIR}/config.txt ${CMAKE_SOURCE_DIR}/bin/config.txt COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/config.txt ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/config.txt COPYONLY)
 
-file(COPY ${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/ DESTINATION ${CMAKE_SOURCE_DIR}/bin)
+file(COPY ${CMAKE_SOURCE_DIR}/lib/zoom_meeting_sdk/ DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
