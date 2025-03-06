@@ -73,7 +73,7 @@ INetworkConnectionHelper* network_connection_helper;
 
 //references for GetVideoRawData
 ZoomSDKRendererDelegate* videoSource = new ZoomSDKRendererDelegate();
-IZoomSDKRenderer* videoHelper;
+IZoomSDKRenderer* ZoomSDKRenderer;
 IMeetingRecordingController* m_pRecordController;
 IMeetingParticipantsController* m_pParticipantsController;
 
@@ -177,15 +177,15 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio)
 			else {
 				//GetVideoRawData
 				if (isVideo) {
-					SDKError err = createRenderer(&videoHelper, videoSource);
+					SDKError err = createRenderer(&ZoomSDKRenderer, videoSource);
 					if (err != SDKERR_SUCCESS) {
 						std::cout << "Error occurred" << std::endl;
 						// Handle error
 					}
 					else {
 						std::cout << "attemptToStartRawRecording : subscribing" << std::endl;
-						videoHelper->setRawDataResolution(ZoomSDKResolution_720P);
-						videoHelper->subscribe(getUserID(), RAW_DATA_TYPE_VIDEO);
+						ZoomSDKRenderer->setRawDataResolution(ZoomSDKResolution_720P);
+						ZoomSDKRenderer->subscribe(getUserID(), RAW_DATA_TYPE_VIDEO);
 					}
 				}
 				//GetAudioRawData
@@ -509,10 +509,10 @@ void CleanSDK()
 			std::cerr << " " << err;
 		std::cerr << std::endl;
 	}
-	if (videoHelper)
+	if (ZoomSDKRenderer)
 	{
-		std::cerr << "Unsubscribing videoHelper" << std::endl;
-		videoHelper->unSubscribe();
+		std::cerr << "ZoomSDKRenderer.unSubscribe()" << std::endl;
+		ZoomSDKRenderer->unSubscribe();
 	}
 	if (audioHelper)
 	{
