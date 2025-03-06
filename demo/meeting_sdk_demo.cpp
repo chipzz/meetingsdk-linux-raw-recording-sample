@@ -72,7 +72,7 @@ ISettingService* m_pSettingService;
 INetworkConnectionHelper* network_connection_helper;
 
 //references for GetVideoRawData
-ZoomSDKRendererDelegate* videoSource = new ZoomSDKRendererDelegate();
+ZoomSDKRendererDelegate *zoomSDKRendererDelegate = new ZoomSDKRendererDelegate();
 IZoomSDKRenderer* ZoomSDKRenderer;
 IMeetingRecordingController* m_pRecordController;
 IMeetingParticipantsController* m_pParticipantsController;
@@ -177,7 +177,7 @@ void CheckAndStartRawRecording(bool isVideo, bool isAudio)
 			else {
 				//GetVideoRawData
 				if (isVideo) {
-					SDKError err = createRenderer(&ZoomSDKRenderer, videoSource);
+					SDKError err = createRenderer(&ZoomSDKRenderer, zoomSDKRendererDelegate);
 					if (err != SDKERR_SUCCESS) {
 						std::cout << "Error occurred" << std::endl;
 						// Handle error
