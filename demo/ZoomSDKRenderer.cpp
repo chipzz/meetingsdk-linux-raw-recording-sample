@@ -53,28 +53,28 @@ std::string ToString(YUVRawDataI420 *yuvRawDataI420)
 #include <cstdint>
 #include <cstdio>
 
-void ZoomSDKRenderer::onRawDataFrameReceived(YUVRawDataI420* data)
+void ZoomSDKRendererDelegate::onRawDataFrameReceived(YUVRawDataI420* data)
 {
-	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataFrameReceived", data);
+	LOG_CALLBACK("ZoomSDKRendererDelegate", "onRawDataFrameReceived", data);
 
 	if (data->GetStreamHeight() == 720) {
 		SaveToRawYUVFile(data);
 	}
 }
 
-void ZoomSDKRenderer::onRawDataStatusChanged(RawDataStatus status)
+void ZoomSDKRendererDelegate::onRawDataStatusChanged(RawDataStatus status)
 {
-	LOG_CALLBACK("ZoomSDKRenderer", "onRawDataStatusChanged", status);
+	LOG_CALLBACK("ZoomSDKRendererDelegate", "onRawDataStatusChanged", status);
 }
 
 extern IZoomSDKRenderer *videoHelper;
-void ZoomSDKRenderer::onRendererBeDestroyed()
+void ZoomSDKRendererDelegate::onRendererBeDestroyed()
 {
-	LOG_CALLBACK("ZoomSDKRenderer", "onRendererBeDestroyed");
+	LOG_CALLBACK("ZoomSDKRendererDelegate", "onRendererBeDestroyed");
 	videoHelper = nullptr;
 }
 
-void ZoomSDKRenderer::SaveToRawYUVFile(YUVRawDataI420* data)
+void ZoomSDKRendererDelegate::SaveToRawYUVFile(YUVRawDataI420* data)
 {
 	//method 1
 
