@@ -165,47 +165,51 @@ std::ostream &operator<<(std::ostream &os, SDKError &err)
 //check if you have permission to start raw recording
 void CheckAndStartRawRecording(bool isVideo, bool isAudio)
 {
-	if (isVideo || isAudio) {
-		m_pRecordController = m_pMeetingService->GetMeetingRecordingController();
-		SDKError err2 = m_pMeetingService->GetMeetingRecordingController()->CanStartRawRecording();
+	if (!isVideo && !isAudio)
+		return;
 
-		if (err2 == SDKERR_SUCCESS) {
-			SDKError err1 = m_pRecordController->StartRawRecording();
-			if (err1 != SDKERR_SUCCESS) {
-				std::cout << "Error occurred starting raw recording" << std::endl;
-			}
-			else {
-				//GetVideoRawData
-				if (isVideo) {
-					SDKError err = createRenderer(&ZoomSDKRenderer, zoomSDKRendererDelegate);
-					if (err != SDKERR_SUCCESS) {
-						std::cout << "Error occurred" << std::endl;
-						// Handle error
-					}
-					else {
-						std::cout << "attemptToStartRawRecording : subscribing" << std::endl;
-						ZoomSDKRenderer->setRawDataResolution(ZoomSDKResolution_720P);
-						ZoomSDKRenderer->subscribe(getUserID(), RAW_DATA_TYPE_VIDEO);
-					}
-				}
-				//GetAudioRawData
-				if (isAudio) {
-					audioHelper = GetAudioRawdataHelper();
-					if (audioHelper) {
-						SDKError err = audioHelper->subscribe(audio_source);
-						if (err != SDKERR_SUCCESS) {
-							std::cout << "Error occurred subscribing to audio : " << err << std::endl;
-						}
-					}
-					else {
-						std::cout << "Error getting audioHelper" << std::endl;
-					}
-				}
-			}
+	m_pRecordController = m_pMeetingService->GetMeetingRecordingController();
+	SDKError err(SDKERR_SUCCESS);
+
+	if ((err = m_pRecordController->CanStartRawRecording()) != SDKERR_SUCCESS)
+	{
+		std::cout << "Cannot start raw recording: no permissions yet, need host, co-host, or recording privilege " << err << std::endl;
+		return;
+	}
+
+	if ((err = m_pRecordController->StartRawRecording()) != SDKERR_SUCCESS)
+	{
+		std::cout << "Error occurred starting raw recording" << err << std::endl;
+		return;
+	}
+
+	//GetVideoRawData
+	if (isVideo)
+	{
+		if ((err = createRenderer(&ZoomSDKRenderer, zoomSDKRendererDelegate)) != SDKERR_SUCCESS)
+		{
+			std::cout << "Error occurred " << err << std::endl;
+			// Handle error
 		}
-		else {
-			std::cout << "Cannot start raw recording: no permissions yet, need host, co-host, or recording privilege " << err2 << std::endl;
+		else
+		{
+			std::cout << "attemptToStartRawRecording : subscribing" << std::endl;
+			ZoomSDKRenderer->setRawDataResolution(ZoomSDKResolution_720P);
+			// FIXME: check return for error?
+			ZoomSDKRenderer->subscribe(getUserID(), RAW_DATA_TYPE_VIDEO);
 		}
+	}
+	//GetAudioRawData
+	if (isAudio)
+	{
+		audioHelper = GetAudioRawdataHelper();
+		if (audioHelper)
+		{
+			if ((err = audioHelper->subscribe(audio_source)) != SDKERR_SUCCESS)
+				std::cout << "Error occurred subscribing to audio: " << err << std::endl;
+		}
+		else
+			std::cout << "Error getting audioHelper" << std::endl;
 	}
 }
 
