@@ -72,7 +72,7 @@ ISettingService* m_pSettingService;
 INetworkConnectionHelper* network_connection_helper;
 
 //references for GetVideoRawData
-ZoomSDKRenderer* videoSource = new ZoomSDKRenderer();
+ZoomSDKRendererDelegate* videoSource = new ZoomSDKRendererDelegate();
 IZoomSDKRenderer* videoHelper;
 IMeetingRecordingController* m_pRecordController;
 IMeetingParticipantsController* m_pParticipantsController;
