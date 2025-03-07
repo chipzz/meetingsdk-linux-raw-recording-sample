@@ -7,7 +7,6 @@
 #include "zoom_sdk_raw_data_def.h"
 
 
-using namespace std;
 USING_ZOOM_SDK_NAMESPACE
 
 class ZoomSDKVirtualAudioMicEvent :
