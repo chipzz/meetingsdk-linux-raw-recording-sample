@@ -3,7 +3,7 @@
 
 USING_ZOOM_SDK_NAMESPACE
 
-class MeetingServiceEventListener : public ZOOM_SDK_NAMESPACE::IMeetingServiceEvent
+class MeetingServiceEventListener : public IMeetingServiceEvent
 {
 	 void (*onMeetingEnds_)();
 	 void (*onMeetingStarts_)();

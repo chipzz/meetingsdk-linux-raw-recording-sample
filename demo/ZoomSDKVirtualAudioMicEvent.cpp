@@ -14,7 +14,6 @@
 #include <chrono>  // for sleep
 
 using namespace std;
-using namespace ZOOM_SDK_NAMESPACE;
 
 int audio_play_flag = -1;
 

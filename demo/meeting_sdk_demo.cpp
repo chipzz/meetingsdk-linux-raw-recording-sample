@@ -66,9 +66,9 @@ GMainLoop* loop;
 std::string meeting_number, token, meeting_password, recording_token;
 
 //Services which are needed to initialize, authenticate and configure settings for the SDK
-ZOOM_SDK_NAMESPACE::IAuthService* m_pAuthService;
-ZOOM_SDK_NAMESPACE::IMeetingService* m_pMeetingService;
-ZOOM_SDK_NAMESPACE::ISettingService* m_pSettingService;
+IAuthService* m_pAuthService;
+IMeetingService* m_pMeetingService;
+ISettingService* m_pSettingService;
 INetworkConnectionHelper* network_connection_helper;
 
 //references for GetVideoRawData
@@ -250,7 +250,7 @@ void onInMeeting()
 	printf("onInMeeting Invoked\n");
 
 	//double check if you are in a meeting
-	if (m_pMeetingService->GetMeetingStatus() == ZOOM_SDK_NAMESPACE::MEETING_STATUS_INMEETING) {
+	if (m_pMeetingService->GetMeetingStatus() == MEETING_STATUS_INMEETING) {
 		printf("In Meeting Now...\n");
 
 		//print all list of participants
@@ -429,21 +429,21 @@ void ReadTEXTSettings()
 
 void CleanSDK()
 {
-	ZOOM_SDK_NAMESPACE::SDKError err(ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS);
+	SDKError err(SDKERR_SUCCESS);
 
 	if (m_pAuthService)
 	{
-		ZOOM_SDK_NAMESPACE::DestroyAuthService(m_pAuthService);
+		DestroyAuthService(m_pAuthService);
 		m_pAuthService = NULL;
 	}
 	if (m_pSettingService)
 	{
-		ZOOM_SDK_NAMESPACE::DestroySettingService(m_pSettingService);
+		DestroySettingService(m_pSettingService);
 		m_pSettingService = NULL;
 	}
 	if (m_pMeetingService)
 	{
-		ZOOM_SDK_NAMESPACE::DestroyMeetingService(m_pMeetingService);
+		DestroyMeetingService(m_pMeetingService);
 		m_pMeetingService = NULL;
 	}
 	if (videoHelper)
@@ -457,13 +457,13 @@ void CleanSDK()
 	/*
 	if (network_connection_helper)
 	{
-		ZOOM_SDK_NAMESPACE::DestroyNetworkConnectionHelper(network_connection_helper);
+		DestroyNetworkConnectionHelper(network_connection_helper);
 		network_connection_helper = NULL;
 	}
 	*/
 	//attempt to clean up SDK
-	err = ZOOM_SDK_NAMESPACE::CleanUPSDK();
-	if (err != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS)
+	err = CleanUPSDK();
+	if (err != SDKERR_SUCCESS)
 	{
 		std::cerr << "CleanSDK meetingSdk:error " << std::endl;
 	}
@@ -474,7 +474,7 @@ void CleanSDK()
 }
 
 void changeMicrophoneAndSpeaker() {
-	ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
+	IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 	if (pAudioContext)
 	{
 		//setting speaker
@@ -551,10 +551,10 @@ void JoinMeeting()
 	meetingremindercontroller->SetEvent(meetingremindereventlistener);
 
 	//prepare params used for joining meeting
-	ZOOM_SDK_NAMESPACE::JoinParam joinParam;
-	ZOOM_SDK_NAMESPACE::SDKError err(ZOOM_SDK_NAMESPACE::SDKERR_SERVICE_FAILED);
-	joinParam.userType = ZOOM_SDK_NAMESPACE::SDK_UT_WITHOUT_LOGIN;
-	ZOOM_SDK_NAMESPACE::JoinParam4WithoutLogin& withoutloginParam = joinParam.param.withoutloginuserJoin;
+	JoinParam joinParam;
+	SDKError err(SDKERR_SERVICE_FAILED);
+	joinParam.userType = SDK_UT_WITHOUT_LOGIN;
+	JoinParam4WithoutLogin& withoutloginParam = joinParam.param.withoutloginuserJoin;
 	// withoutloginParam.meetingNumber = 1231231234;
 	withoutloginParam.meetingNumber = std::stoull(meeting_number);
 	withoutloginParam.vanityID = NULL;
@@ -587,7 +587,7 @@ void JoinMeeting()
 	if (GetAudioRawData)
 	{
 		//set join audio to true
-		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
+		IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{
 			//ensure auto join audio
@@ -599,7 +599,7 @@ void JoinMeeting()
 		//ensure video is turned on
 		withoutloginParam.isVideoOff = false;
 		//set join video to true
-		ZOOM_SDK_NAMESPACE::IVideoSettingContext* pVideoContext = m_pSettingService->GetVideoSettings();
+		IVideoSettingContext* pVideoContext = m_pSettingService->GetVideoSettings();
 		if (pVideoContext)
 		{
 			pVideoContext->EnableAutoTurnOffVideoWhenJoinMeeting(false);
@@ -607,7 +607,7 @@ void JoinMeeting()
 	}
 	if (SendAudioRawData)
 	{
-		ZOOM_SDK_NAMESPACE::IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
+		IAudioSettingContext* pAudioContext = m_pSettingService->GetAudioSettings();
 		if (pAudioContext)
 		{
 			//ensure auto join audio
@@ -628,7 +628,7 @@ void JoinMeeting()
 		std::cout << "join_meeting m_pMeetingService:Null" << std::endl;
 	}
 
-	if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS == err)
+	if (SDKERR_SUCCESS == err)
 	{
 		std::cout << "join_meeting:success" << std::endl;
 	}
@@ -640,7 +640,7 @@ void JoinMeeting()
 
 void LeaveMeeting()
 {
-	ZOOM_SDK_NAMESPACE::MeetingStatus status = ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED;
+	MeetingStatus status = MEETING_STATUS_FAILED;
 
 	if (NULL == m_pMeetingService)
 	{
@@ -651,14 +651,14 @@ void LeaveMeeting()
 		status = m_pMeetingService->GetMeetingStatus();
 	}
 
-	if (status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_IDLE ||
-		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_ENDED ||
-		status == ZOOM_SDK_NAMESPACE::MEETING_STATUS_FAILED)
+	if (status == MEETING_STATUS_IDLE ||
+		status == MEETING_STATUS_ENDED ||
+		status == MEETING_STATUS_FAILED)
 	{
 		std::cout << "LeaveMeeting() not in meeting " << std::endl;
 	}
 
-	if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(ZOOM_SDK_NAMESPACE::LEAVE_MEETING))
+	if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(LEAVE_MEETING))
 	{
 		std::cout << "LeaveMeeting() success " << std::endl;
 	}
@@ -684,7 +684,7 @@ void AuthMeetingSDK()
 	std::cerr << "AuthService created." << std::endl;
 
 	//Create a param to insert jwt token
-	ZOOM_SDK_NAMESPACE::AuthContext param;
+	AuthContext param;
 
 	//set the event listener for onauthenticationcompleted
 	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS) {};
@@ -696,9 +696,9 @@ void AuthMeetingSDK()
 	}
 	m_pAuthService->SDKAuth(param);
 	////attempt to authenticate
-	//ZOOM_SDK_NAMESPACE::SDKError sdkErrorResult = m_pAuthService->SDKAuth(param);
+	//SDKError sdkErrorResult = m_pAuthService->SDKAuth(param);
 
-	//if (ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS != sdkErrorResult){
+	//if (SDKERR_SUCCESS != sdkErrorResult){
 	//	std::cerr << "AuthSDK:error " << std::endl;
 	//}
 	//else{
@@ -708,23 +708,23 @@ void AuthMeetingSDK()
 
 void InitMeetingSDK()
 {
-	ZOOM_SDK_NAMESPACE::SDKError err(ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS);
-	ZOOM_SDK_NAMESPACE::InitParam initParam;
+	SDKError err(SDKERR_SUCCESS);
+	InitParam initParam;
 
 	// set domain
 	initParam.strWebDomain = "https://zoom.us";
 	initParam.strSupportUrl = "https://zoom.us";
 
 	// set language id
-	initParam.emLanguageID = ZOOM_SDK_NAMESPACE::LANGUAGE_English;
+	initParam.emLanguageID = LANGUAGE_English;
 
 	//set logging perferences
 	initParam.enableLogByDefault = true;
 	initParam.enableGenerateDump = true;
 
 	// attempt to initialize
-	err = ZOOM_SDK_NAMESPACE::InitSDK(initParam);
-	if (err != ZOOM_SDK_NAMESPACE::SDKERR_SUCCESS){
+	err = InitSDK(initParam);
+	if (err != SDKERR_SUCCESS){
 		std::cerr << "Init meetingSdk:error " << std::endl;
 	}
 	else{
@@ -745,14 +745,14 @@ void InitMeetingSDK()
 //used for non headless app 
 void StartMeeting()
 {
-	ZOOM_SDK_NAMESPACE::StartParam startParam;
-	startParam.userType = ZOOM_SDK_NAMESPACE::SDK_UT_NORMALUSER;
+	StartParam startParam;
+	startParam.userType = SDK_UT_NORMALUSER;
 	startParam.param.normaluserStart.vanityID = NULL;
 	startParam.param.normaluserStart.customer_key = NULL;
 	startParam.param.normaluserStart.isVideoOff = false;
 	startParam.param.normaluserStart.isAudioOff = false;
 
-	ZOOM_SDK_NAMESPACE::SDKError err = m_pMeetingService->Start(startParam);
+	SDKError err = m_pMeetingService->Start(startParam);
 	if (SDKError::SDKERR_SUCCESS == err)
 	{
 		std::cerr << "StartMeeting:success " << std::endl;

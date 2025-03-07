@@ -4,7 +4,7 @@
 USING_ZOOM_SDK_NAMESPACE
 
 
-class MeetingReminderEventListener : public ZOOM_SDK_NAMESPACE::IMeetingReminderEvent
+class MeetingReminderEventListener : public IMeetingReminderEvent
 {
 public:
     MeetingReminderEventListener();
