@@ -15,19 +15,19 @@ RUN	\
 &&	rm -fR /var/lib/apt/lists /var/lib/dpkg/status-old
 
 # Specify the run script as the CMD
-CMD ["/app/run.sh"]
+CMD ["/app/pa-wrapper"]
 
 RUN mkdir /app
 
 # Define a shell script to run multiple commands
 RUN	\
-	echo '#!/bin/sh' > /app/run.sh \
-&&	echo '/app/demo/setup-pulseaudio.sh' >> /app/run.sh \
-&&	echo 'cd /app/demo' >> /app/run.sh \
-&&	echo 'exec /app/demo/bin/meetingSDKDemo' >> /app/run.sh
+	echo '#!/bin/sh' > /app/pa-wrapper \
+&&	echo '/app/demo/setup-pulseaudio.sh' >> /app/pa-wrapper \
+&&	echo 'cd /app/demo' >> /app/pa-wrapper \
+&&	echo 'exec /app/demo/meetingSDKDemo' >> /app/pa-wrapper
 
 # Make the run script executable
-RUN chmod +x /app/run.sh
+RUN chmod +x /app/pa-wrapper
 
 # Copy your application files to the container
 COPY demo/ /app/demo/
@@ -39,17 +39,19 @@ WORKDIR /app/demo
 # Build
 RUN	\
 	rm -rf bin build \
-&&	cmake -B build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=../bin \
+&&	cmake -B build -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=.. \
 &&	cmake --build build
 
 RUN	\
-	rm -fR build CMakeLists.txt Makefile *.cpp *.h include bin/libmeetingsdk.so* bin/qt_libs config-txt-update \
-# Remove build dependencies \
-&&	apt-get -y purge \
-	g++ make binutils cmake pkgconf \
-	libglib2.0-dev \
-	libswscale-dev libavutil-dev libavcodec-dev libavformat-dev \
-&&	apt-get -y --purge autoremove
+	rm -fR build CMakeLists.txt Makefile *.cpp *.h include libmeetingsdk.so* qt_libs setup-pulseaudio-centos.sh config-txt-update \
+&&	find . -name readme.md -delete
+
+## Remove build dependencies \
+#&&	apt-get -y purge \
+#	g++ make binutils cmake pkgconf \
+#	libglib2.0-dev \
+#	libswscale-dev libavutil-dev libavcodec-dev libavformat-dev \
+#&&	apt-get -y --purge autoremove
 
 FROM ubuntu:22.04 AS run
 
@@ -67,7 +69,7 @@ RUN	\
 &&	rm -fR /var/lib/apt/lists /var/lib/dpkg/status-old
 
 COPY --from=build /app /app
-CMD ["/app/demo/bin/meetingSDKDemo"]
+CMD ["/app/demo/meetingSDKDemo"]
 
 # Crap? Keep for now
 
