@@ -67,6 +67,8 @@ RUN	\
 COPY --from=build /cain-meetingsdk-streamer /cain-meetingsdk-streamer
 CMD ["/cain-meetingsdk-streamer/meetingSDKDemo"]
 
+WORKDIR /cain-meetingsdk-streamer
+
 # Crap? Keep for now
 
 #	libegl-mesa0 \
