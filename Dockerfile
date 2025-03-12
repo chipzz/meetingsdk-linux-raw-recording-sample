@@ -15,26 +15,22 @@ RUN	\
 &&	rm -fR /var/lib/apt/lists /var/lib/dpkg/status-old
 
 # Specify the run script as the CMD
-CMD ["/app/pa-wrapper"]
+CMD ["/cain-meetingsdk-streamer/pa-wrapper"]
 
-RUN mkdir /app
+# Copy your application files to the container
+COPY demo/ /cain-meetingsdk-streamer/
 
 # Define a shell script to run multiple commands
 RUN	\
-	echo '#!/bin/sh' > /app/pa-wrapper \
-&&	echo '/app/demo/setup-pulseaudio.sh' >> /app/pa-wrapper \
-&&	echo 'cd /app/demo' >> /app/pa-wrapper \
-&&	echo 'exec /app/demo/meetingSDKDemo' >> /app/pa-wrapper
+	echo '#!/bin/sh' > /cain-meetingsdk-streamer/pa-wrapper \
+&&	echo '/cain-meetingsdk-streamer/setup-pulseaudio.sh' >> /cain-meetingsdk-streamer/pa-wrapper \
+&&	echo 'cd /cain-meetingsdk-streamer' >> /cain-meetingsdk-streamer/pa-wrapper \
+&&	echo 'exec /cain-meetingsdk-streamer/meetingSDKDemo' >> /cain-meetingsdk-streamer/pa-wrapper
 
 # Make the run script executable
-RUN chmod +x /app/pa-wrapper
+RUN chmod +x /cain-meetingsdk-streamer/setup-pulseaudio.sh /cain-meetingsdk-streamer/pa-wrapper
 
-# Copy your application files to the container
-COPY demo/ /app/demo/
-
-RUN chmod +x /app/demo/setup-pulseaudio.sh
-
-WORKDIR /app/demo
+WORKDIR /cain-meetingsdk-streamer
 
 # Build
 RUN	\
@@ -68,8 +64,8 @@ RUN	\
 &&	apt-get clean \
 &&	rm -fR /var/lib/apt/lists /var/lib/dpkg/status-old
 
-COPY --from=build /app /app
-CMD ["/app/demo/meetingSDKDemo"]
+COPY --from=build /cain-meetingsdk-streamer /cain-meetingsdk-streamer
+CMD ["/cain-meetingsdk-streamer/meetingSDKDemo"]
 
 # Crap? Keep for now
 
