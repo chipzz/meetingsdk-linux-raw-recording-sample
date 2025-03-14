@@ -643,32 +643,25 @@ void JoinMeeting()
 
 void LeaveMeeting()
 {
-	MeetingStatus status = MEETING_STATUS_FAILED;
-
 	if (NULL == m_pMeetingService)
 	{
-		std::cout << "leave_meeting m_pMeetingService:Null" << std::endl;
-	}
-	else
-	{
-		status = m_pMeetingService->GetMeetingStatus();
+		std::cout << "LeaveMeeting MeetingService = null" << std::endl;
+		return;
 	}
 
+	MeetingStatus status = m_pMeetingService->GetMeetingStatus();
 	if (status == MEETING_STATUS_IDLE ||
 		status == MEETING_STATUS_ENDED ||
 		status == MEETING_STATUS_FAILED)
 	{
-		std::cout << "LeaveMeeting() not in meeting " << std::endl;
+		std::cout << "LeaveMeeting() not in meeting, status " << status << std::endl;
+		return;
 	}
 
-	if (SDKERR_SUCCESS == m_pMeetingService->Leave(LEAVE_MEETING))
-	{
-		std::cout << "LeaveMeeting() success " << std::endl;
-	}
-	else
-	{
-		std::cout << "LeaveMeeting() error" << std::endl;
-	}
+	std::cout << "MeetingService.Leave()" << std::endl;
+	SDKError err = m_pMeetingService->Leave(LEAVE_MEETING);
+	if (err != SDKERR_SUCCESS)
+		std::cout << "MeetingService.Leave() error " << err << std::endl;
 }
 
 //callback when authentication is compeleted
