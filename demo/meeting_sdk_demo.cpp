@@ -522,11 +522,11 @@ void changeMicrophoneAndSpeaker() {
 void JoinMeeting()
 {
 	std::cerr << "Joining Meeting" << std::endl;
-	SDKError err2(SDKError::SDKERR_SUCCESS);
+	SDKError err2(SDKERR_SUCCESS);
 
 	//try to create the meetingservice object, 
 	//this object will be used to join the meeting
-	if ((err2 = CreateMeetingService(&m_pMeetingService)) != SDKError::SDKERR_SUCCESS) {};
+	if ((err2 = CreateMeetingService(&m_pMeetingService)) != SDKERR_SUCCESS) {};
 	std::cerr << "MeetingService created." << std::endl;
 
 	//before joining a meeting, create the setting service
@@ -658,7 +658,7 @@ void LeaveMeeting()
 		std::cout << "LeaveMeeting() not in meeting " << std::endl;
 	}
 
-	if (SDKError::SDKERR_SUCCESS == m_pMeetingService->Leave(LEAVE_MEETING))
+	if (SDKERR_SUCCESS == m_pMeetingService->Leave(LEAVE_MEETING))
 	{
 		std::cout << "LeaveMeeting() success " << std::endl;
 	}
@@ -677,17 +677,17 @@ void OnAuthenticationComplete()
 
 void AuthMeetingSDK()
 {
-	SDKError err(SDKError::SDKERR_SUCCESS);
+	SDKError err(SDKERR_SUCCESS);
 
 	//create auth service
-	if ((err = CreateAuthService(&m_pAuthService)) != SDKError::SDKERR_SUCCESS) {};
+	if ((err = CreateAuthService(&m_pAuthService)) != SDKERR_SUCCESS) {};
 	std::cerr << "AuthService created." << std::endl;
 
 	//Create a param to insert jwt token
 	AuthContext param;
 
 	//set the event listener for onauthenticationcompleted
-	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKError::SDKERR_SUCCESS) {};
+	if ((err = m_pAuthService->SetEvent(new AuthServiceEventListener(&OnAuthenticationComplete))) != SDKERR_SUCCESS) {};
 	std::cout << "AuthServiceEventListener added." << std::endl;
 
 	if (!token.size() == 0){
@@ -733,10 +733,10 @@ void InitMeetingSDK()
 
 	//use connection helper
 	/*
-	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKError::SDKERR_SUCCESS) {
+	if ((err = CreateNetworkConnectionHelper(&network_connection_helper)) == SDKERR_SUCCESS) {
 		std::cout << "CreateNetworkConnectionHelper created." << std::endl;
 	}
-	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKError::SDKERR_SUCCESS) {
+	if ((err = network_connection_helper->RegisterNetworkConnectionHandler(new NetworkConnectionHandler(&AuthMeetingSDK))) == SDKERR_SUCCESS) {
 		std::cout << "NetworkConnectionHandler registered. Detecting proxy." << std::endl;
 	}
 	*/
@@ -753,7 +753,7 @@ void StartMeeting()
 	startParam.param.normaluserStart.isAudioOff = false;
 
 	SDKError err = m_pMeetingService->Start(startParam);
-	if (SDKError::SDKERR_SUCCESS == err)
+	if (SDKERR_SUCCESS == err)
 	{
 		std::cerr << "StartMeeting:success " << std::endl;
 	}
