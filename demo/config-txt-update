@@ -12,4 +12,4 @@ fi
 meeting_token=`curl -sH 'Content-Type: application/json' -d "{ \"role\": 1, \"expirationSeconds\": 172799, \"meetingNumber\": $meeting_number }" http://localhost:4000 | jq -r .signature -`
 update_config meeting_number "$meeting_number"
 update_config token "$meeting_token"
-cp "$config_txt" bin/
+test -d bin && cp "$config_txt" bin/
